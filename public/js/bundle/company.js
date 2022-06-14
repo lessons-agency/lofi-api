@@ -1,1 +1,960 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[186],{90184:(t,e,a)=>{a.r(e),a.d(e,{default:()=>r});var n=a(74865),o=a.n(n);const s={metaInfo:{title:"Company"},data:function(){return{isLoading:!0,SubmitProcessing:!1,serverParams:{columnFilters:{},sort:{field:"id",type:"desc"},page:1,perPage:10},selectedIds:[],totalRows:"",search:"",limit:"10",companies:[],editmode:!1,company:{name:"",email:"",country:"",phone:""}}},computed:{columns:function(){return[{label:this.$t("Name"),field:"name",tdClass:"text-left",thClass:"text-left"},{label:this.$t("Phone"),field:"phone",tdClass:"text-left",thClass:"text-left"},{label:this.$t("Country"),field:"country",tdClass:"text-left",thClass:"text-left"},{label:this.$t("Email"),field:"email",tdClass:"text-left",thClass:"text-left"},{label:this.$t("Action"),field:"actions",html:!0,tdClass:"text-right",thClass:"text-right",sortable:!1}]}},methods:{updateParams:function(t){this.serverParams=Object.assign({},this.serverParams,t)},onPageChange:function(t){var e=t.currentPage;this.serverParams.page!==e&&(this.updateParams({page:e}),this.Get_Company(e))},onPerPageChange:function(t){var e=t.currentPerPage;this.limit!==e&&(this.limit=e,this.updateParams({page:1,perPage:e}),this.Get_Company(1))},selectionChanged:function(t){var e=this,a=t.selectedRows;this.selectedIds=[],a.forEach((function(t,a){e.selectedIds.push(t.id)}))},onSortChange:function(t){this.updateParams({sort:{type:t[0].type,field:t[0].field}}),this.Get_Company(this.serverParams.page)},onSearch:function(t){this.search=t.searchTerm,this.Get_Company(this.serverParams.page)},getValidationState:function(t){var e=t.dirty,a=t.validated,n=t.valid;return e||a?void 0===n?null:n:null},Submit_Company:function(){var t=this;this.$refs.Create_Company.validate().then((function(e){e?t.editmode?t.Update_Company():t.Create_Company():t.makeToast("danger",t.$t("Please_fill_the_form_correctly"),t.$t("Failed"))}))},makeToast:function(t,e,a){this.$root.$bvToast.toast(e,{title:a,variant:t,solid:!0})},New_Company:function(){this.reset_Form(),this.editmode=!1,this.$bvModal.show("New_Company")},Edit_Company:function(t){this.Get_Company(this.serverParams.page),this.reset_Form(),this.company=t,this.editmode=!0,this.$bvModal.show("New_Company")},Get_Company:function(t){var e=this;o().start(),o().set(.1),axios.get("company?page="+t+"&SortField="+this.serverParams.sort.field+"&SortType="+this.serverParams.sort.type+"&search="+this.search+"&limit="+this.limit).then((function(t){e.companies=t.data.companies,e.totalRows=t.data.totalRows,o().done(),e.isLoading=!1})).catch((function(t){o().done(),setTimeout((function(){e.isLoading=!1}),500)}))},Create_Company:function(){var t=this;this.SubmitProcessing=!0,axios.post("company",{name:this.company.name,email:this.company.email,country:this.company.country,phone:this.company.phone}).then((function(e){t.SubmitProcessing=!1,Fire.$emit("Event_Company"),t.makeToast("success",t.$t("Created_in_successfully"),t.$t("Success"))})).catch((function(e){t.SubmitProcessing=!1,t.makeToast("danger",t.$t("InvalidData"),t.$t("Failed"))}))},Update_Company:function(){var t=this;this.SubmitProcessing=!0,axios.put("company/"+this.company.id,{name:this.company.name,email:this.company.email,country:this.company.country,phone:this.company.phone}).then((function(e){t.SubmitProcessing=!1,Fire.$emit("Event_Company"),t.makeToast("success",t.$t("Updated_in_successfully"),t.$t("Success"))})).catch((function(e){t.SubmitProcessing=!1,t.makeToast("danger",t.$t("InvalidData"),t.$t("Failed"))}))},reset_Form:function(){this.company={id:"",name:"",email:"",country:"",phone:""}},Remove_Company:function(t){var e=this;this.$swal({title:this.$t("Delete.Title"),text:this.$t("Delete.Text"),type:"warning",showCancelButton:!0,confirmButtonColor:"#3085d6",cancelButtonColor:"#d33",cancelButtonText:this.$t("Delete.cancelButtonText"),confirmButtonText:this.$t("Delete.confirmButtonText")}).then((function(a){a.value&&axios.delete("company/"+t).then((function(){e.$swal(e.$t("Delete.Deleted"),e.$t("Deleted_in_successfully"),"success"),Fire.$emit("Delete_Company")})).catch((function(){e.$swal(e.$t("Delete.Failed"),e.$t("Delete.Therewassomethingwronge"),"warning")}))}))},delete_by_selected:function(){var t=this;this.$swal({title:this.$t("Delete.Title"),text:this.$t("Delete.Text"),type:"warning",showCancelButton:!0,confirmButtonColor:"#3085d6",cancelButtonColor:"#d33",cancelButtonText:this.$t("Delete.cancelButtonText"),confirmButtonText:this.$t("Delete.confirmButtonText")}).then((function(e){e.value&&(o().start(),o().set(.1),axios.post("company/delete/by_selection",{selectedIds:t.selectedIds}).then((function(){t.$swal(t.$t("Delete.Deleted"),t.$t("Deleted_in_successfully"),"success"),Fire.$emit("Delete_Company")})).catch((function(){setTimeout((function(){return o().done()}),500),t.$swal(t.$t("Delete.Failed"),t.$t("Delete.Therewassomethingwronge"),"warning")})))}))}},created:function(){var t=this;this.Get_Company(1),Fire.$on("Event_Company",(function(){setTimeout((function(){t.Get_Company(t.serverParams.page),t.$bvModal.hide("New_Company")}),500)})),Fire.$on("Delete_Company",(function(){setTimeout((function(){t.Get_Company(t.serverParams.page)}),500)}))}},i=s;const r=(0,a(51900).Z)(i,(function(){var t=this,e=t.$createElement,a=t._self._c||e;return a("div",{staticClass:"main-content"},[a("breadcumb",{attrs:{page:t.$t("Company"),folder:t.$t("hrm")}}),t._v(" "),t.isLoading?a("div",{staticClass:"loading_page spinner spinner-primary mr-3"}):t._e(),t._v(" "),t.isLoading?t._e():a("b-card",{staticClass:"wrapper"},[a("vue-good-table",{attrs:{mode:"remote",columns:t.columns,totalRows:t.totalRows,rows:t.companies,"search-options":{enabled:!0,placeholder:t.$t("Search_this_table")},"select-options":{enabled:!0,clearSelectionText:""},"pagination-options":{enabled:!0,mode:"records",nextLabel:"next",prevLabel:"prev"},styleClass:"table-hover tableOne vgt-table"},on:{"on-page-change":t.onPageChange,"on-per-page-change":t.onPerPageChange,"on-sort-change":t.onSortChange,"on-search":t.onSearch,"on-selected-rows-change":t.selectionChanged},scopedSlots:t._u([{key:"table-row",fn:function(e){return["actions"==e.column.field?a("span",[a("a",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:!0}}],staticClass:"cursor-pointer",attrs:{title:"Edit"},on:{click:function(a){return t.Edit_Company(e.row)}}},[a("i",{staticClass:"i-Edit text-25 text-success"})]),t._v(" "),a("a",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:!0}}],staticClass:"cursor-pointer",attrs:{title:"Delete"},on:{click:function(a){return t.Remove_Company(e.row.id)}}},[a("i",{staticClass:"i-Close-Window text-25 text-danger"})])]):t._e()]}}],null,!1,1713410970)},[a("div",{attrs:{slot:"selected-row-actions"},slot:"selected-row-actions"},[a("button",{staticClass:"btn btn-danger btn-sm",on:{click:function(e){return t.delete_by_selected()}}},[t._v(t._s(t.$t("Del")))])]),t._v(" "),a("div",{staticClass:"mt-2 mb-3",attrs:{slot:"table-actions"},slot:"table-actions"},[a("b-button",{staticClass:"btn-rounded",attrs:{variant:"btn btn-primary btn-icon m-1"},on:{click:function(e){return t.New_Company()}}},[a("i",{staticClass:"i-Add"}),t._v("\n          "+t._s(t.$t("Add"))+"\n        ")])],1)])],1),t._v(" "),a("validation-observer",{ref:"Create_Company"},[a("b-modal",{attrs:{"hide-footer":"",size:"lg",id:"New_Company",title:t.editmode?t.$t("Edit"):t.$t("Add")}},[a("b-form",{on:{submit:function(e){return e.preventDefault(),t.Submit_Company.apply(null,arguments)}}},[a("b-row",[a("b-col",{attrs:{md:"6"}},[a("validation-provider",{attrs:{name:"Name",rules:{required:!0}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("Name")+" *"}},[a("b-form-input",{attrs:{placeholder:t.$t("Enter_Company_Name"),state:t.getValidationState(e),"aria-describedby":"Name-feedback",label:"Name"},model:{value:t.company.name,callback:function(e){t.$set(t.company,"name",e)},expression:"company.name"}}),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"Name-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}])})],1),t._v(" "),a("b-col",{attrs:{md:"6"}},[a("b-form-group",{attrs:{label:t.$t("Email")}},[a("b-form-input",{attrs:{placeholder:t.$t("Enter_email_address"),label:"Email"},model:{value:t.company.email,callback:function(e){t.$set(t.company,"email",e)},expression:"company.email"}})],1)],1),t._v(" "),a("b-col",{attrs:{md:"6"}},[a("b-form-group",{attrs:{label:t.$t("Phone")}},[a("b-form-input",{attrs:{placeholder:t.$t("Enter_Company_Phone"),label:"Phone"},model:{value:t.company.phone,callback:function(e){t.$set(t.company,"phone",e)},expression:"company.phone"}})],1)],1),t._v(" "),a("b-col",{attrs:{md:"6"}},[a("b-form-group",{attrs:{label:t.$t("Country")}},[a("b-form-input",{attrs:{placeholder:t.$t("Enter_Company_Country"),label:"Country"},model:{value:t.company.country,callback:function(e){t.$set(t.company,"country",e)},expression:"company.country"}})],1)],1),t._v(" "),a("b-col",{staticClass:"mt-3",attrs:{md:"12"}},[a("b-button",{attrs:{variant:"primary",type:"submit",disabled:t.SubmitProcessing}},[t._v(t._s(t.$t("submit")))]),t._v(" "),t.SubmitProcessing?t._m(0):t._e()],1)],1)],1)],1)],1)],1)}),[function(){var t=this.$createElement,e=this._self._c||t;return e("div",{staticClass:"typo__p"},[e("div",{staticClass:"spinner sm spinner-primary mt-3"})])}],!1,null,null,null).exports}}]);
+"use strict";
+(self["webpackChunk"] = self["webpackChunk"] || []).push([["company"],{
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/hrm/company.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/hrm/company.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! nprogress */ "./node_modules/nprogress/nprogress.js");
+/* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nprogress__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  metaInfo: {
+    title: "Company"
+  },
+  data: function data() {
+    return {
+      isLoading: true,
+      SubmitProcessing: false,
+      serverParams: {
+        columnFilters: {},
+        sort: {
+          field: "id",
+          type: "desc"
+        },
+        page: 1,
+        perPage: 10
+      },
+      selectedIds: [],
+      totalRows: "",
+      search: "",
+      limit: "10",
+      companies: [],
+      editmode: false,
+      company: {
+        name: "",
+        email: "",
+        country: "",
+        phone: ""
+      }
+    };
+  },
+  computed: {
+    columns: function columns() {
+      return [{
+        label: this.$t("Name"),
+        field: "name",
+        tdClass: "text-left",
+        thClass: "text-left"
+      }, {
+        label: this.$t("Phone"),
+        field: "phone",
+        tdClass: "text-left",
+        thClass: "text-left"
+      }, {
+        label: this.$t("Country"),
+        field: "country",
+        tdClass: "text-left",
+        thClass: "text-left"
+      }, {
+        label: this.$t("Email"),
+        field: "email",
+        tdClass: "text-left",
+        thClass: "text-left"
+      }, {
+        label: this.$t("Action"),
+        field: "actions",
+        html: true,
+        tdClass: "text-right",
+        thClass: "text-right",
+        sortable: false
+      }];
+    }
+  },
+  methods: {
+    //---- update Params Table
+    updateParams: function updateParams(newProps) {
+      this.serverParams = Object.assign({}, this.serverParams, newProps);
+    },
+    //---- Event Page Change
+    onPageChange: function onPageChange(_ref) {
+      var currentPage = _ref.currentPage;
+
+      if (this.serverParams.page !== currentPage) {
+        this.updateParams({
+          page: currentPage
+        });
+        this.Get_Company(currentPage);
+      }
+    },
+    //---- Event Per Page Change
+    onPerPageChange: function onPerPageChange(_ref2) {
+      var currentPerPage = _ref2.currentPerPage;
+
+      if (this.limit !== currentPerPage) {
+        this.limit = currentPerPage;
+        this.updateParams({
+          page: 1,
+          perPage: currentPerPage
+        });
+        this.Get_Company(1);
+      }
+    },
+    //---- Event Select Rows
+    selectionChanged: function selectionChanged(_ref3) {
+      var _this = this;
+
+      var selectedRows = _ref3.selectedRows;
+      this.selectedIds = [];
+      selectedRows.forEach(function (row, index) {
+        _this.selectedIds.push(row.id);
+      });
+    },
+    //---- Event Sort Change
+    onSortChange: function onSortChange(params) {
+      this.updateParams({
+        sort: {
+          type: params[0].type,
+          field: params[0].field
+        }
+      });
+      this.Get_Company(this.serverParams.page);
+    },
+    //---- Event Search
+    onSearch: function onSearch(value) {
+      this.search = value.searchTerm;
+      this.Get_Company(this.serverParams.page);
+    },
+    //---- Validation State Form
+    getValidationState: function getValidationState(_ref4) {
+      var dirty = _ref4.dirty,
+          validated = _ref4.validated,
+          _ref4$valid = _ref4.valid,
+          valid = _ref4$valid === void 0 ? null : _ref4$valid;
+      return dirty || validated ? valid : null;
+    },
+    //------------- Submit Validation Create & Edit Company
+    Submit_Company: function Submit_Company() {
+      var _this2 = this;
+
+      this.$refs.Create_Company.validate().then(function (success) {
+        if (!success) {
+          _this2.makeToast("danger", _this2.$t("Please_fill_the_form_correctly"), _this2.$t("Failed"));
+        } else {
+          if (!_this2.editmode) {
+            _this2.Create_Company();
+          } else {
+            _this2.Update_Company();
+          }
+        }
+      });
+    },
+    //------ Toast
+    makeToast: function makeToast(variant, msg, title) {
+      this.$root.$bvToast.toast(msg, {
+        title: title,
+        variant: variant,
+        solid: true
+      });
+    },
+    //------------------------------ Modal (create company) -------------------------------\\
+    New_Company: function New_Company() {
+      this.reset_Form();
+      this.editmode = false;
+      this.$bvModal.show("New_Company");
+    },
+    //------------------------------ Modal (Update company) -------------------------------\\
+    Edit_Company: function Edit_Company(company) {
+      this.Get_Company(this.serverParams.page);
+      this.reset_Form();
+      this.company = company;
+      this.editmode = true;
+      this.$bvModal.show("New_Company");
+    },
+    //--------------------------Get ALL company ---------------------------\\
+    Get_Company: function Get_Company(page) {
+      var _this3 = this;
+
+      // Start the progress bar.
+      nprogress__WEBPACK_IMPORTED_MODULE_0___default().start();
+      nprogress__WEBPACK_IMPORTED_MODULE_0___default().set(0.1);
+      axios.get("company?page=" + page + "&SortField=" + this.serverParams.sort.field + "&SortType=" + this.serverParams.sort.type + "&search=" + this.search + "&limit=" + this.limit).then(function (response) {
+        _this3.companies = response.data.companies;
+        _this3.totalRows = response.data.totalRows; // Complete the animation of theprogress bar.
+
+        nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+        _this3.isLoading = false;
+      })["catch"](function (response) {
+        // Complete the animation of theprogress bar.
+        nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+        setTimeout(function () {
+          _this3.isLoading = false;
+        }, 500);
+      });
+    },
+    //------------------------------- Create company ------------------------\\
+    Create_Company: function Create_Company() {
+      var _this4 = this;
+
+      this.SubmitProcessing = true;
+      axios.post("company", {
+        name: this.company.name,
+        email: this.company.email,
+        country: this.company.country,
+        phone: this.company.phone
+      }).then(function (response) {
+        _this4.SubmitProcessing = false;
+        Fire.$emit("Event_Company");
+
+        _this4.makeToast("success", _this4.$t("Created_in_successfully"), _this4.$t("Success"));
+      })["catch"](function (error) {
+        _this4.SubmitProcessing = false;
+
+        _this4.makeToast("danger", _this4.$t("InvalidData"), _this4.$t("Failed"));
+      });
+    },
+    //------------------------------- Update company ------------------------\\
+    Update_Company: function Update_Company() {
+      var _this5 = this;
+
+      this.SubmitProcessing = true;
+      axios.put("company/" + this.company.id, {
+        name: this.company.name,
+        email: this.company.email,
+        country: this.company.country,
+        phone: this.company.phone
+      }).then(function (response) {
+        _this5.SubmitProcessing = false;
+        Fire.$emit("Event_Company");
+
+        _this5.makeToast("success", _this5.$t("Updated_in_successfully"), _this5.$t("Success"));
+      })["catch"](function (error) {
+        _this5.SubmitProcessing = false;
+
+        _this5.makeToast("danger", _this5.$t("InvalidData"), _this5.$t("Failed"));
+      });
+    },
+    //------------------------------- reset Form ------------------------\\
+    reset_Form: function reset_Form() {
+      this.company = {
+        id: "",
+        name: "",
+        email: "",
+        country: "",
+        phone: ""
+      };
+    },
+    //------------------------------- Delete company ------------------------\\
+    Remove_Company: function Remove_Company(id) {
+      var _this6 = this;
+
+      this.$swal({
+        title: this.$t("Delete.Title"),
+        text: this.$t("Delete.Text"),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: this.$t("Delete.cancelButtonText"),
+        confirmButtonText: this.$t("Delete.confirmButtonText")
+      }).then(function (result) {
+        if (result.value) {
+          axios["delete"]("company/" + id).then(function () {
+            _this6.$swal(_this6.$t("Delete.Deleted"), _this6.$t("Deleted_in_successfully"), "success");
+
+            Fire.$emit("Delete_Company");
+          })["catch"](function () {
+            _this6.$swal(_this6.$t("Delete.Failed"), _this6.$t("Delete.Therewassomethingwronge"), "warning");
+          });
+        }
+      });
+    },
+    //---- Delete company by selection
+    delete_by_selected: function delete_by_selected() {
+      var _this7 = this;
+
+      this.$swal({
+        title: this.$t("Delete.Title"),
+        text: this.$t("Delete.Text"),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: this.$t("Delete.cancelButtonText"),
+        confirmButtonText: this.$t("Delete.confirmButtonText")
+      }).then(function (result) {
+        if (result.value) {
+          // Start the progress bar.
+          nprogress__WEBPACK_IMPORTED_MODULE_0___default().start();
+          nprogress__WEBPACK_IMPORTED_MODULE_0___default().set(0.1);
+          axios.post("company/delete/by_selection", {
+            selectedIds: _this7.selectedIds
+          }).then(function () {
+            _this7.$swal(_this7.$t("Delete.Deleted"), _this7.$t("Deleted_in_successfully"), "success");
+
+            Fire.$emit("Delete_Company");
+          })["catch"](function () {
+            // Complete the animation of theprogress bar.
+            setTimeout(function () {
+              return nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+            }, 500);
+
+            _this7.$swal(_this7.$t("Delete.Failed"), _this7.$t("Delete.Therewassomethingwronge"), "warning");
+          });
+        }
+      });
+    }
+  },
+  //----------------------------- Created function-------------------\\
+  created: function created() {
+    var _this8 = this;
+
+    this.Get_Company(1);
+    Fire.$on("Event_Company", function () {
+      setTimeout(function () {
+        _this8.Get_Company(_this8.serverParams.page);
+
+        _this8.$bvModal.hide("New_Company");
+      }, 500);
+    });
+    Fire.$on("Delete_Company", function () {
+      setTimeout(function () {
+        _this8.Get_Company(_this8.serverParams.page);
+      }, 500);
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/hrm/company.vue":
+/*!*******************************************************!*\
+  !*** ./resources/src/views/app/pages/hrm/company.vue ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _company_vue_vue_type_template_id_6c0b2bc4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./company.vue?vue&type=template&id=6c0b2bc4& */ "./resources/src/views/app/pages/hrm/company.vue?vue&type=template&id=6c0b2bc4&");
+/* harmony import */ var _company_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./company.vue?vue&type=script&lang=js& */ "./resources/src/views/app/pages/hrm/company.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _company_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _company_vue_vue_type_template_id_6c0b2bc4___WEBPACK_IMPORTED_MODULE_0__.render,
+  _company_vue_vue_type_template_id_6c0b2bc4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/src/views/app/pages/hrm/company.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/hrm/company.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/src/views/app/pages/hrm/company.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_company_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./company.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/hrm/company.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_company_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/hrm/company.vue?vue&type=template&id=6c0b2bc4&":
+/*!**************************************************************************************!*\
+  !*** ./resources/src/views/app/pages/hrm/company.vue?vue&type=template&id=6c0b2bc4& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_company_vue_vue_type_template_id_6c0b2bc4___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_company_vue_vue_type_template_id_6c0b2bc4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_company_vue_vue_type_template_id_6c0b2bc4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./company.vue?vue&type=template&id=6c0b2bc4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/hrm/company.vue?vue&type=template&id=6c0b2bc4&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/hrm/company.vue?vue&type=template&id=6c0b2bc4&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/hrm/company.vue?vue&type=template&id=6c0b2bc4& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "main-content" },
+    [
+      _c("breadcumb", {
+        attrs: { page: _vm.$t("Company"), folder: _vm.$t("hrm") },
+      }),
+      _vm._v(" "),
+      _vm.isLoading
+        ? _c("div", {
+            staticClass: "loading_page spinner spinner-primary mr-3",
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.isLoading
+        ? _c(
+            "b-card",
+            { staticClass: "wrapper" },
+            [
+              _c(
+                "vue-good-table",
+                {
+                  attrs: {
+                    mode: "remote",
+                    columns: _vm.columns,
+                    totalRows: _vm.totalRows,
+                    rows: _vm.companies,
+                    "search-options": {
+                      enabled: true,
+                      placeholder: _vm.$t("Search_this_table"),
+                    },
+                    "select-options": {
+                      enabled: true,
+                      clearSelectionText: "",
+                    },
+                    "pagination-options": {
+                      enabled: true,
+                      mode: "records",
+                      nextLabel: "next",
+                      prevLabel: "prev",
+                    },
+                    styleClass: "table-hover tableOne vgt-table",
+                  },
+                  on: {
+                    "on-page-change": _vm.onPageChange,
+                    "on-per-page-change": _vm.onPerPageChange,
+                    "on-sort-change": _vm.onSortChange,
+                    "on-search": _vm.onSearch,
+                    "on-selected-rows-change": _vm.selectionChanged,
+                  },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "table-row",
+                        fn: function (props) {
+                          return [
+                            props.column.field == "actions"
+                              ? _c("span", [
+                                  _c(
+                                    "a",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "b-tooltip",
+                                          rawName: "v-b-tooltip.hover",
+                                          modifiers: { hover: true },
+                                        },
+                                      ],
+                                      staticClass: "cursor-pointer",
+                                      attrs: { title: "Edit" },
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.Edit_Company(props.row)
+                                        },
+                                      },
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass:
+                                          "i-Edit text-25 text-success",
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "b-tooltip",
+                                          rawName: "v-b-tooltip.hover",
+                                          modifiers: { hover: true },
+                                        },
+                                      ],
+                                      staticClass: "cursor-pointer",
+                                      attrs: { title: "Delete" },
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.Remove_Company(
+                                            props.row.id
+                                          )
+                                        },
+                                      },
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass:
+                                          "i-Close-Window text-25 text-danger",
+                                      }),
+                                    ]
+                                  ),
+                                ])
+                              : _vm._e(),
+                          ]
+                        },
+                      },
+                    ],
+                    null,
+                    false,
+                    1713410970
+                  ),
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      attrs: { slot: "selected-row-actions" },
+                      slot: "selected-row-actions",
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-sm",
+                          on: {
+                            click: function ($event) {
+                              return _vm.delete_by_selected()
+                            },
+                          },
+                        },
+                        [_vm._v(_vm._s(_vm.$t("Del")))]
+                      ),
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "mt-2 mb-3",
+                      attrs: { slot: "table-actions" },
+                      slot: "table-actions",
+                    },
+                    [
+                      _c(
+                        "b-button",
+                        {
+                          staticClass: "btn-rounded",
+                          attrs: { variant: "btn btn-primary btn-icon m-1" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.New_Company()
+                            },
+                          },
+                        },
+                        [
+                          _c("i", { staticClass: "i-Add" }),
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(_vm.$t("Add")) +
+                              "\n        "
+                          ),
+                        ]
+                      ),
+                    ],
+                    1
+                  ),
+                ]
+              ),
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "validation-observer",
+        { ref: "Create_Company" },
+        [
+          _c(
+            "b-modal",
+            {
+              attrs: {
+                "hide-footer": "",
+                size: "lg",
+                id: "New_Company",
+                title: _vm.editmode ? _vm.$t("Edit") : _vm.$t("Add"),
+              },
+            },
+            [
+              _c(
+                "b-form",
+                {
+                  on: {
+                    submit: function ($event) {
+                      $event.preventDefault()
+                      return _vm.Submit_Company.apply(null, arguments)
+                    },
+                  },
+                },
+                [
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        { attrs: { md: "6" } },
+                        [
+                          _c("validation-provider", {
+                            attrs: { name: "Name", rules: { required: true } },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function (validationContext) {
+                                  return [
+                                    _c(
+                                      "b-form-group",
+                                      {
+                                        attrs: {
+                                          label: _vm.$t("Name") + " " + "*",
+                                        },
+                                      },
+                                      [
+                                        _c("b-form-input", {
+                                          attrs: {
+                                            placeholder:
+                                              _vm.$t("Enter_Company_Name"),
+                                            state:
+                                              _vm.getValidationState(
+                                                validationContext
+                                              ),
+                                            "aria-describedby": "Name-feedback",
+                                            label: "Name",
+                                          },
+                                          model: {
+                                            value: _vm.company.name,
+                                            callback: function ($$v) {
+                                              _vm.$set(_vm.company, "name", $$v)
+                                            },
+                                            expression: "company.name",
+                                          },
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "b-form-invalid-feedback",
+                                          { attrs: { id: "Name-feedback" } },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                validationContext.errors[0]
+                                              )
+                                            ),
+                                          ]
+                                        ),
+                                      ],
+                                      1
+                                    ),
+                                  ]
+                                },
+                              },
+                            ]),
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { md: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            { attrs: { label: _vm.$t("Email") } },
+                            [
+                              _c("b-form-input", {
+                                attrs: {
+                                  placeholder: _vm.$t("Enter_email_address"),
+                                  label: "Email",
+                                },
+                                model: {
+                                  value: _vm.company.email,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.company, "email", $$v)
+                                  },
+                                  expression: "company.email",
+                                },
+                              }),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { md: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            { attrs: { label: _vm.$t("Phone") } },
+                            [
+                              _c("b-form-input", {
+                                attrs: {
+                                  placeholder: _vm.$t("Enter_Company_Phone"),
+                                  label: "Phone",
+                                },
+                                model: {
+                                  value: _vm.company.phone,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.company, "phone", $$v)
+                                  },
+                                  expression: "company.phone",
+                                },
+                              }),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { md: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            { attrs: { label: _vm.$t("Country") } },
+                            [
+                              _c("b-form-input", {
+                                attrs: {
+                                  placeholder: _vm.$t("Enter_Company_Country"),
+                                  label: "Country",
+                                },
+                                model: {
+                                  value: _vm.company.country,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.company, "country", $$v)
+                                  },
+                                  expression: "company.country",
+                                },
+                              }),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "mt-3", attrs: { md: "12" } },
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              attrs: {
+                                variant: "primary",
+                                type: "submit",
+                                disabled: _vm.SubmitProcessing,
+                              },
+                            },
+                            [_vm._v(_vm._s(_vm.$t("submit")))]
+                          ),
+                          _vm._v(" "),
+                          _vm.SubmitProcessing ? _vm._m(0) : _vm._e(),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "typo__p" }, [
+      _c("div", { staticClass: "spinner sm spinner-primary mt-3" }),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ })
+
+}]);

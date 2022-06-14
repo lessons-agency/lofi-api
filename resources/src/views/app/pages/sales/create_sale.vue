@@ -666,7 +666,8 @@ export default {
         product_variant_id: "",
         is_imei: "",
         imei_number:"",
-      }
+      },
+
     };
   },
 
@@ -677,6 +678,10 @@ export default {
  
 
   methods: {
+
+
+
+
 
 
     async loadStripe_payment() {
@@ -820,6 +825,7 @@ export default {
 
     //------ Show Modal Update Detail Product
     Modal_Updat_Detail(detail) {
+
       NProgress.start();
       NProgress.set(0.1);
       this.detail = {};
@@ -853,6 +859,7 @@ export default {
       NProgress.set(0.1);
       this.Submit_Processing_detail = true;
       for (var i = 0; i < this.details.length; i++) {
+  
         if (this.details[i].detail_id === this.detail.detail_id) {
 
           // this.convert_unit();
@@ -947,17 +954,19 @@ export default {
       }
       if (this.sale.warehouse_id != "" &&  this.sale.warehouse_id != null) {
         this.timer = setTimeout(() => {
-          const product_filter = this.products.filter(product => product.code === this.search_input || product.barcode.includes(this.search_input));
+          const product_filter = this.products.filter(product => product.code === this.search_input || product.barcode.includes(this.search_input) > -1);
             if(product_filter.length === 1){
                 this.SearchProduct(product_filter[0])
             }else{
                 this.product_filter=  this.products.filter(product => {
                   return (
-                    product.name.toLowerCase().includes(this.search_input.toLowerCase()) ||
+                    product.name.toLowerCase().indexOf(this.search_input.toLowerCase()) > -1 ||
                     product.code.toLowerCase().includes(this.search_input.toLowerCase()) ||
                     product.barcode.toLowerCase().includes(this.search_input.toLowerCase())
                     );
                 });
+
+    
             }
         }, 800);
       } else {
@@ -973,7 +982,7 @@ export default {
     //------------------------- get Result Value Search Product
 
     getResultValue(result) {
-      return result.code + " " + "(" + result.name + ")";
+      return result.name + " " + "(" + result.code + ")";
     },
 
     //------------------------- Submit Search Product
@@ -1027,19 +1036,26 @@ export default {
           });
     },
 
+
+
+
+
     //----------------------------------------- Add Product to order list -------------------------\\
     add_product() {
       if (this.details.length > 0) {
+     
         this.Last_Detail_id();
       } else if (this.details.length === 0) {
         this.product.detail_id = 1;
       }
+
 
       this.details.push(this.product);
       if(this.product.is_imei){
         this.Modal_Updat_Detail(this.product);
       }
     },
+
 
     //-----------------------------------Verified QTY ------------------------------\\
     Verified_Qty(detail, id) {
@@ -1335,13 +1351,14 @@ export default {
 
     Get_Product_Details(product_id) {
       axios.get("Products/" + product_id).then(response => {
+        console.log("From Here", response.data)
         this.product.discount = 0;
         this.product.DiscountNet = 0;
         this.product.discount_Method = "2";
         this.product.product_id = response.data.id;
         this.product.name = response.data.name;
-        this.product.Net_price = response.data.Net_price;
-        this.product.Unit_price = response.data.Unit_price;
+        this.product.Net_price = response.data.Unit_cost;
+        this.product.Unit_price = response.data.Unit_cost;
         this.product.taxe = response.data.tax_price;
         this.product.tax_method = response.data.tax_method;
         this.product.tax_percent = response.data.tax_percent;

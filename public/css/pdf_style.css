@@ -72,11 +72,11 @@ header {
 	border-top: 2px solid;
 }
 
-/* #total>table tr:last-child td {
+#total>table tr:last-child td {
 	background: blueviolet;
 	color: #fff;
 	font-weight: bold;
-} */
+}
 
 #Title-heading {
 	float: right;

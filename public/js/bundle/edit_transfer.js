@@ -1,1 +1,3124 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[9374],{42708:(t,e,a)=>{a.r(e),a.d(e,{default:()=>d});var s=a(20629),i=a(74865),r=a.n(i);function n(t,e){var a=Object.keys(t);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(t);e&&(s=s.filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),a.push.apply(a,s)}return a}function o(t,e,a){return e in t?Object.defineProperty(t,e,{value:a,enumerable:!0,configurable:!0,writable:!0}):t[e]=a,t}const l={metaInfo:{title:"Update Transfer"},data:function(){return{focused:!1,timer:null,search_input:"",product_filter:[],isLoading:!0,SubmitProcessing:!1,details:[],detail:{quantity:"",discount:"",Unit_cost:"",discount_Method:"",tax_percent:"",tax_method:""},warehouses:[],products:[],total:0,GrandTotal:0,transfer:{id:"",from_warehouse:"",to_warehouse:"",statut:"",notes:"",items:"",date:"",tax_rate:0,TaxNet:0,shipping:0,discount:0},product:{id:"",code:"",stock:"",quantity:"",discount:"",DiscountNet:"",discount_Method:"",name:"",no_unit:"",unitPurchase:"",purchase_unit_id:"",Net_cost:"",Unit_cost:"",Total_cost:"",subtotal:"",product_id:"",detail_id:"",taxe:"",tax_percent:"",tax_method:"",product_variant_id:"",etat:""}}},computed:function(t){for(var e=1;e<arguments.length;e++){var a=null!=arguments[e]?arguments[e]:{};e%2?n(Object(a),!0).forEach((function(e){o(t,e,a[e])})):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(a)):n(Object(a)).forEach((function(e){Object.defineProperty(t,e,Object.getOwnPropertyDescriptor(a,e))}))}return t}({},(0,s.Se)(["currentUser"])),methods:{handleFocus:function(){this.focused=!0},handleBlur:function(){this.focused=!1},Submit_Transfer:function(){var t=this;this.$refs.Edit_transfer.validate().then((function(e){e?t.Update_Transfer():t.makeToast("danger",t.$t("Please_fill_the_form_correctly"),t.$t("Failed"))}))},submit_Update_Detail:function(){var t=this;this.$refs.Update_Detail_transfer.validate().then((function(e){e&&t.Update_Detail()}))},getValidationState:function(t){var e=t.dirty,a=t.validated,s=t.valid;return e||a?void 0===s?null:s:null},Modal_Updat_Detail:function(t){this.detail={},this.detail.name=t.name,this.detail.detail_id=t.detail_id,this.detail.Unit_cost=t.Unit_cost,this.detail.tax_method=t.tax_method,this.detail.discount_Method=t.discount_Method,this.detail.discount=t.discount,this.detail.quantity=t.quantity,this.detail.tax_percent=t.tax_percent,this.$bvModal.show("form_Update_Detail")},Update_Detail:function(){for(var t=0;t<this.details.length;t++)this.details[t].detail_id===this.detail.detail_id&&(this.details[t].tax_percent=this.detail.tax_percent,this.details[t].Unit_cost=this.detail.Unit_cost,this.details[t].quantity=this.detail.quantity,this.details[t].tax_method=this.detail.tax_method,this.details[t].discount_Method=this.detail.discount_Method,this.details[t].discount=this.detail.discount,"2"==this.details[t].discount_Method?this.details[t].DiscountNet=this.detail.discount:this.details[t].DiscountNet=parseFloat(this.detail.Unit_cost*this.details[t].discount/100),"1"==this.details[t].tax_method?(this.details[t].Net_cost=parseFloat(this.detail.Unit_cost-this.details[t].DiscountNet),this.details[t].taxe=parseFloat(this.detail.tax_percent*(this.detail.Unit_cost-this.details[t].DiscountNet)/100)):(this.details[t].Net_cost=parseFloat((this.detail.Unit_cost-this.details[t].DiscountNet)/(this.detail.tax_percent/100+1)),this.details[t].taxe=parseFloat(this.detail.Unit_cost-this.details[t].Net_cost-this.details[t].DiscountNet)),this.$forceUpdate());this.Calcul_Total(),this.$bvModal.hide("form_Update_Detail")},makeToast:function(t,e,a){this.$root.$bvToast.toast(e,{title:a,variant:t,solid:!0})},search:function(){var t=this;if(this.timer&&(clearTimeout(this.timer),this.timer=null),this.search_input.length<1)return this.product_filter=[];""!=this.transfer.from_warehouse&&null!=this.transfer.from_warehouse?this.timer=setTimeout((function(){var e=t.products.filter((function(e){return e.code===t.search_input||e.barcode.includes(t.search_input)}));1===e.length?t.SearchProduct(e[0]):t.product_filter=t.products.filter((function(e){return e.name.toLowerCase().includes(t.search_input.toLowerCase())||e.code.toLowerCase().includes(t.search_input.toLowerCase())||e.barcode.toLowerCase().includes(t.search_input.toLowerCase())}))}),800):this.makeToast("warning",this.$t("SelectWarehouse"),this.$t("Warning"))},getResultValue:function(t){return t.code+" ("+t.name+")"},SearchProduct:function(t){this.product={},this.details.length>0&&this.details.some((function(e){return e.code===t.code}))?this.makeToast("warning",this.$t("AlreadyAdd"),this.$t("Warning")):(this.product.code=t.code,this.product.no_unit=1,this.product.stock=t.qte_purchase,t.qte_purchase<1?this.product.quantity=t.qte_purchase:this.product.quantity=1,this.product.product_variant_id=t.product_variant_id,this.Get_Product_Details(t.id)),this.search_input="",this.$refs.product_autocomplete.value="",this.product_filter=[]},verifiedForm:function(){if(this.details.length<=0)return this.makeToast("warning",this.$t("AddProductToList"),this.$t("Warning")),!1;if(this.transfer.from_warehouse===this.transfer.to_warehouse)return this.makeToast("warning",this.$t("WarehouseIdentical"),this.$t("Warning")),!1;for(var t=0,e=0;e<this.details.length;e++)""==this.details[e].quantity&&(t+=1);return!(t>0)||(this.makeToast("warning",this.$t("AddQuantity"),this.$t("Warning")),!1)},Update_Transfer:function(){var t=this;if(this.verifiedForm()){this.SubmitProcessing=!0,r().start(),r().set(.1);var e=this.$route.params.id;axios.put("transfers/".concat(e),{transfer:this.transfer,details:this.details,GrandTotal:this.GrandTotal}).then((function(e){r().done(),t.SubmitProcessing=!1,t.$router.push({name:"index_transfer"}),t.makeToast("success",t.$t("Update.TitleTransfer"),t.$t("Success"))})).catch((function(e){r().done(),t.makeToast("danger",t.$t("InvalidData"),t.$t("Failed")),t.SubmitProcessing=!1}))}},Last_Detail_id:function(){this.product.detail_id=0;var t=this.details.length;this.product.detail_id=this.details[t-1].detail_id+1},add_product:function(){this.details.length>0?this.Last_Detail_id():0===this.details.length&&(this.product.detail_id=1),this.details.push(this.product)},Verified_Qty:function(t,e){for(var a=0;a<this.details.length;a++)this.details[a].detail_id===e&&(isNaN(t.quantity)&&(this.details[a].quantity=t.qte_copy),"new"==t.etat&&t.quantity>t.stock?(this.makeToast("warning",this.$t("LowStock"),this.$t("Warning")),this.details[a].quantity=t.stock):"current"==t.etat&&t.quantity>t.stock+t.qte_copy?(this.makeToast("warning",this.$t("LowStock"),this.$t("Warning")),this.details[a].quantity=t.qte_copy):this.details[a].quantity=t.quantity);this.$forceUpdate(),this.Calcul_Total()},increment:function(t,e){for(var a=0;a<this.details.length;a++)this.details[a].detail_id==e&&("new"==t.etat&&t.quantity+1>t.stock||"current"==t.etat&&t.quantity+1>t.stock+t.qte_copy?this.makeToast("warning",this.$t("LowStock"),this.$t("Warning")):this.formatNumber(this.details[a].quantity++,2));this.$forceUpdate(),this.Calcul_Total()},decrement:function(t,e){for(var a=0;a<this.details.length;a++)this.details[a].detail_id==e&&t.quantity-1>0&&("new"==t.etat&&t.quantity-1>t.stock||"current"==t.etat&&t.quantity-1>t.stock+t.qte_copy?this.makeToast("warning",this.$t("LowStock"),this.$t("Warning")):this.formatNumber(this.details[a].quantity--,2));this.$forceUpdate(),this.Calcul_Total()},Calcul_Total:function(){this.total=0;for(var t=0;t<this.details.length;t++){var e=this.details[t].taxe*this.details[t].quantity;this.details[t].subtotal=parseFloat(this.details[t].quantity*this.details[t].Net_cost+e),this.total=parseFloat(this.total+this.details[t].subtotal)}var a=parseFloat(this.total-this.transfer.discount);this.transfer.TaxNet=parseFloat(a*this.transfer.tax_rate/100),this.GrandTotal=parseFloat(a+this.transfer.TaxNet+this.transfer.shipping);var s=this.GrandTotal.toFixed(2);this.GrandTotal=parseFloat(s)},delete_Product_Detail:function(t){for(var e=0;e<this.details.length;e++)t===this.details[e].detail_id&&(this.details.splice(e,1),this.Calcul_Total())},keyup_OrderTax:function(){isNaN(this.transfer.tax_rate)?this.transfer.tax_rate=0:""==this.transfer.tax_rate?(this.transfer.tax_rate=0,this.Calcul_Total()):this.Calcul_Total()},keyup_Discount:function(){isNaN(this.transfer.discount)?this.transfer.discount=0:""==this.transfer.discount?(this.transfer.discount=0,this.Calcul_Total()):this.Calcul_Total()},keyup_Shipping:function(){isNaN(this.transfer.shipping)?this.transfer.shipping=0:""==this.transfer.shipping?(this.transfer.shipping=0,this.Calcul_Total()):this.Calcul_Total()},formatNumber:function(t,e){var a=("string"==typeof t?t:t.toString()).split(".");if(e<=0)return a[0];var s=a[1]||"";if(s.length>e)return"".concat(a[0],".").concat(s.substr(0,e));for(;s.length<e;)s+="0";return"".concat(a[0],".").concat(s)},Get_Products_By_Warehouse:function(t){var e=this;r().start(),r().set(.1),axios.get("Products/Warehouse/"+t+"?stock=1").then((function(t){e.products=t.data,r().done()})).catch((function(t){}))},Get_Product_Details:function(t){var e=this;axios.get("Products/"+t).then((function(t){e.product.discount=0,e.product.DiscountNet=0,e.product.discount_Method="2",e.product.del=0,e.product.id=0,e.product.etat="new",e.product.product_id=t.data.id,e.product.name=t.data.name,e.product.Net_cost=t.data.Net_cost,e.product.Unit_cost=t.data.Unit_cost,e.product.taxe=t.data.tax_cost,e.product.tax_method=t.data.tax_method,e.product.tax_percent=t.data.tax_percent,e.product.unitPurchase=t.data.unitPurchase,e.product.purchase_unit_id=t.data.purchase_unit_id,e.add_product(),e.Calcul_Total()}))},Selected_From_Warehouse:function(t){this.search_input="",this.product_filter=[],this.Get_Products_By_Warehouse(t)},GetElements:function(){var t=this,e=this.$route.params.id;axios.get("transfers/".concat(e,"/edit")).then((function(e){t.transfer=e.data.transfer,t.details=e.data.details,t.warehouses=e.data.warehouses,t.Get_Products_By_Warehouse(t.transfer.from_warehouse),t.Calcul_Total(),t.isLoading=!1})).catch((function(e){setTimeout((function(){t.isLoading=!1}),500)}))}},created:function(){this.GetElements()}};const d=(0,a(51900).Z)(l,(function(){var t=this,e=t.$createElement,a=t._self._c||e;return a("div",{staticClass:"main-content"},[a("breadcumb",{attrs:{page:t.$t("EditTransfer"),folder:t.$t("ListTransfers")}}),t._v(" "),t.isLoading?a("div",{staticClass:"loading_page spinner spinner-primary mr-3"}):t._e(),t._v(" "),t.isLoading?t._e():a("validation-observer",{ref:"Edit_transfer"},[a("b-form",{on:{submit:function(e){return e.preventDefault(),t.Submit_Transfer.apply(null,arguments)}}},[a("b-row",[a("b-col",{attrs:{lg:"12",md:"12",sm:"12"}},[a("b-card",[a("b-row",[a("b-col",{staticClass:"mb-3",attrs:{lg:"4",md:"4",sm:"12"}},[a("validation-provider",{attrs:{name:"date",rules:{required:!0}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("date")+" *"}},[a("b-form-input",{attrs:{state:t.getValidationState(e),"aria-describedby":"date-feedback",type:"date"},model:{value:t.transfer.date,callback:function(e){t.$set(t.transfer,"date",e)},expression:"transfer.date"}}),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"OrderTax-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}],null,!1,3120178706)})],1),t._v(" "),a("b-col",{staticClass:"mb-3",attrs:{lg:"4",md:"4",sm:"12"}},[a("validation-provider",{attrs:{name:"From Warehouse",rules:{required:!0}},scopedSlots:t._u([{key:"default",fn:function(e){var s=e.valid,i=e.errors;return a("b-form-group",{attrs:{label:t.$t("FromWarehouse")+" *"}},[a("v-select",{class:{"is-invalid":!!i.length},attrs:{state:!i[0]&&(!!s||null),disabled:t.details.length>0,reduce:function(t){return t.value},placeholder:t.$t("Choose_Warehouse"),options:t.warehouses.map((function(t){return{label:t.name,value:t.id}}))},on:{input:t.Selected_From_Warehouse},model:{value:t.transfer.from_warehouse,callback:function(e){t.$set(t.transfer,"from_warehouse",e)},expression:"transfer.from_warehouse"}}),t._v(" "),a("b-form-invalid-feedback",[t._v(t._s(i[0]))])],1)}}],null,!1,196005589)})],1),t._v(" "),a("b-col",{staticClass:"mb-3",attrs:{lg:"4",md:"4",sm:"12"}},[a("validation-provider",{attrs:{name:"To Warehouse",rules:{required:!0}},scopedSlots:t._u([{key:"default",fn:function(e){var s=e.valid,i=e.errors;return a("b-form-group",{attrs:{label:t.$t("ToWarehouse")+" *"}},[a("v-select",{class:{"is-invalid":!!i.length},attrs:{state:!i[0]&&(!!s||null),reduce:function(t){return t.value},placeholder:t.$t("Choose_Warehouse"),options:t.warehouses.map((function(t){return{label:t.name,value:t.id}}))},model:{value:t.transfer.to_warehouse,callback:function(e){t.$set(t.transfer,"to_warehouse",e)},expression:"transfer.to_warehouse"}}),t._v(" "),a("b-form-invalid-feedback",[t._v(t._s(i[0]))])],1)}}],null,!1,2600691786)})],1),t._v(" "),a("b-col",{staticClass:"mb-5",attrs:{md:"12"}},[a("h6",[t._v(t._s(t.$t("ProductName")))]),t._v(" "),a("div",{staticClass:"autocomplete",attrs:{id:"autocomplete"}},[a("input",{ref:"product_autocomplete",staticClass:"autocomplete-input",attrs:{placeholder:t.$t("Scan_Search_Product_by_Code_Name")},on:{input:function(e){return t.search_input=e.target.value},keyup:function(e){return t.search(t.search_input)},focus:t.handleFocus,blur:t.handleBlur}}),t._v(" "),a("ul",{directives:[{name:"show",rawName:"v-show",value:t.focused,expression:"focused"}],staticClass:"autocomplete-result-list"},t._l(t.product_filter,(function(e){return a("li",{staticClass:"autocomplete-result",on:{mousedown:function(a){return t.SearchProduct(e)}}},[t._v(t._s(t.getResultValue(e)))])})),0)])]),t._v(" "),a("b-col",{attrs:{md:"12"}},[a("div",{staticClass:"table-responsive"},[a("table",{staticClass:"table table-hover"},[a("thead",{staticClass:"bg-gray-300"},[a("tr",[a("th",{attrs:{scope:"col"}},[t._v("#")]),t._v(" "),a("th",{attrs:{scope:"col"}},[t._v(t._s(t.$t("ProductName")))]),t._v(" "),a("th",{attrs:{scope:"col"}},[t._v(t._s(t.$t("Net_Unit_Cost")))]),t._v(" "),a("th",{attrs:{scope:"col"}},[t._v(t._s(t.$t("CurrentStock")))]),t._v(" "),a("th",{attrs:{scope:"col"}},[t._v(t._s(t.$t("Qty")))]),t._v(" "),a("th",{attrs:{scope:"col"}},[t._v(t._s(t.$t("Discount")))]),t._v(" "),a("th",{attrs:{scope:"col"}},[t._v(t._s(t.$t("Tax")))]),t._v(" "),a("th",{attrs:{scope:"col"}},[t._v(t._s(t.$t("SubTotal")))]),t._v(" "),a("th",{staticClass:"text-center",attrs:{scope:"col"}},[a("i",{staticClass:"fa fa-trash"})])])]),t._v(" "),a("tbody",[t.details.length<=0?a("tr",[a("td",{attrs:{colspan:"9"}},[t._v(t._s(t.$t("NodataAvailable")))])]):t._e(),t._v(" "),t._l(t.details,(function(e){return a("tr",{key:e.detail_id,class:{row_deleted:1===e.del||0===e.no_unit}},[a("td",[t._v(t._s(e.detail_id))]),t._v(" "),a("td",[a("span",[t._v(t._s(e.code))]),t._v(" "),a("br"),t._v(" "),a("span",{staticClass:"badge badge-success"},[t._v(t._s(e.name))]),t._v(" "),a("i",{directives:[{name:"show",rawName:"v-show",value:0!==e.no_unit,expression:"detail.no_unit !== 0"}],staticClass:"i-Edit",on:{click:function(a){return t.Modal_Updat_Detail(e)}}})]),t._v(" "),a("td",[t._v(t._s(t.currentUser.currency)+" "+t._s(t.formatNumber(e.Net_cost,3)))]),t._v(" "),a("td",[a("span",{staticClass:"badge badge-outline-warning"},[t._v(t._s(e.stock)+" "+t._s(e.unitPurchase))])]),t._v(" "),a("td",[a("div",{staticClass:"quantity"},[a("b-input-group",[a("b-input-group-prepend",[a("span",{directives:[{name:"show",rawName:"v-show",value:0!==e.no_unit,expression:"detail.no_unit !== 0"}],staticClass:"btn btn-primary btn-sm",on:{click:function(a){return t.decrement(e,e.detail_id)}}},[t._v("-")])]),t._v(" "),a("input",{directives:[{name:"model",rawName:"v-model.number",value:e.quantity,expression:"detail.quantity",modifiers:{number:!0}}],staticClass:"form-control",attrs:{disabled:1===e.del||0===e.no_unit},domProps:{value:e.quantity},on:{keyup:function(a){return t.Verified_Qty(e,e.detail_id)},input:function(a){a.target.composing||t.$set(e,"quantity",t._n(a.target.value))},blur:function(e){return t.$forceUpdate()}}}),t._v(" "),a("b-input-group-append",[a("span",{directives:[{name:"show",rawName:"v-show",value:0!==e.no_unit,expression:"detail.no_unit !== 0"}],staticClass:"btn btn-primary btn-sm",on:{click:function(a){return t.increment(e,e.detail_id)}}},[t._v("+")])])],1)],1)]),t._v(" "),a("td",[t._v(t._s(t.currentUser.currency)+" "+t._s(t.formatNumber(e.DiscountNet*e.quantity,2)))]),t._v(" "),a("td",[t._v(t._s(t.currentUser.currency)+" "+t._s(t.formatNumber(e.taxe*e.quantity,2)))]),t._v(" "),a("td",[t._v(t._s(t.currentUser.currency)+" "+t._s(e.subtotal.toFixed(2)))]),t._v(" "),a("td",[a("a",{directives:[{name:"show",rawName:"v-show",value:0!==e.no_unit,expression:"detail.no_unit !== 0"}],staticClass:"btn btn-icon btn-sm",attrs:{title:"Delete"},on:{click:function(a){return t.delete_Product_Detail(e.detail_id)}}},[a("i",{staticClass:"i-Close-Window text-25 text-danger"})])])])}))],2)])])]),t._v(" "),a("div",{staticClass:"offset-md-9 col-md-3 mt-4"},[a("table",{staticClass:"table table-striped table-sm"},[a("tbody",[a("tr",[a("td",{staticClass:"bold"},[t._v(t._s(t.$t("OrderTax")))]),t._v(" "),a("td",[a("span",[t._v(t._s(t.currentUser.currency)+" "+t._s(t.transfer.TaxNet.toFixed(2))+" ("+t._s(t.formatNumber(t.transfer.tax_rate,2))+" %)")])])]),t._v(" "),a("tr",[a("td",{staticClass:"bold"},[t._v(t._s(t.$t("Discount")))]),t._v(" "),a("td",[t._v(t._s(t.currentUser.currency)+" "+t._s(t.transfer.discount.toFixed(2)))])]),t._v(" "),a("tr",[a("td",{staticClass:"bold"},[t._v(t._s(t.$t("Shipping")))]),t._v(" "),a("td",[t._v(t._s(t.currentUser.currency)+" "+t._s(t.transfer.shipping.toFixed(2)))])]),t._v(" "),a("tr",[a("td",[a("span",{staticClass:"font-weight-bold"},[t._v(t._s(t.$t("Total")))])]),t._v(" "),a("td",[a("span",{staticClass:"font-weight-bold"},[t._v(t._s(t.currentUser.currency)+" "+t._s(t.GrandTotal.toFixed(2)))])])])])])]),t._v(" "),a("b-col",{staticClass:"mb-3",attrs:{lg:"4",md:"4",sm:"12"}},[a("validation-provider",{attrs:{name:"Order Tax",rules:{regex:/^\d*\.?\d*$/}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("OrderTax")}},[a("b-input-group",{attrs:{append:"%"}},[a("b-form-input",{attrs:{state:t.getValidationState(e),"aria-describedby":"OrderTax-feedback",label:"Order Tax"},on:{keyup:function(e){return t.keyup_OrderTax()}},model:{value:t.transfer.tax_rate,callback:function(e){t.$set(t.transfer,"tax_rate",t._n(e))},expression:"transfer.tax_rate"}})],1),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"OrderTax-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}],null,!1,907389170)})],1),t._v(" "),a("b-col",{staticClass:"mb-3",attrs:{lg:"4",md:"4",sm:"12"}},[a("validation-provider",{attrs:{name:"Discount",rules:{regex:/^\d*\.?\d*$/}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("Discount")}},[a("b-input-group",{attrs:{append:t.currentUser.currency}},[a("b-form-input",{attrs:{state:t.getValidationState(e),"aria-describedby":"Discount-feedback",label:"Discount"},on:{keyup:function(e){return t.keyup_Discount()}},model:{value:t.transfer.discount,callback:function(e){t.$set(t.transfer,"discount",t._n(e))},expression:"transfer.discount"}})],1),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"Discount-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}],null,!1,3103063445)})],1),t._v(" "),a("b-col",{staticClass:"mb-3",attrs:{lg:"4",md:"4",sm:"12"}},[a("validation-provider",{attrs:{name:"Shipping",rules:{regex:/^\d*\.?\d*$/}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("Shipping")}},[a("b-input-group",{attrs:{append:t.currentUser.currency}},[a("b-form-input",{attrs:{state:t.getValidationState(e),"aria-describedby":"Shipping-feedback",label:"Shipping"},on:{keyup:function(e){return t.keyup_Shipping()}},model:{value:t.transfer.shipping,callback:function(e){t.$set(t.transfer,"shipping",t._n(e))},expression:"transfer.shipping"}})],1),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"Shipping-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}],null,!1,1389454933)})],1),t._v(" "),a("b-col",{staticClass:"mb-3",attrs:{lg:"4",md:"4",sm:"12"}},[a("validation-provider",{attrs:{name:"Status",rules:{required:!0}},scopedSlots:t._u([{key:"default",fn:function(e){var s=e.valid,i=e.errors;return a("b-form-group",{attrs:{label:t.$t("Status")+" *"}},[a("v-select",{class:{"is-invalid":!!i.length},attrs:{state:!i[0]&&(!!s||null),reduce:function(t){return t.value},placeholder:t.$t("Choose_Status"),options:[{label:"Completed",value:"completed"},{label:"Sent",value:"sent"},{label:"Pending",value:"pending"}]},model:{value:t.transfer.statut,callback:function(e){t.$set(t.transfer,"statut",e)},expression:"transfer.statut"}}),t._v(" "),a("b-form-invalid-feedback",[t._v(t._s(i[0]))])],1)}}],null,!1,524404404)})],1),t._v(" "),a("b-col",{attrs:{md:"12"}},[a("b-form-group",{attrs:{label:t.$t("Note")}},[a("textarea",{directives:[{name:"model",rawName:"v-model",value:t.transfer.notes,expression:"transfer.notes"}],staticClass:"form-control",attrs:{rows:"4",placeholder:t.$t("Afewwords")},domProps:{value:t.transfer.notes},on:{input:function(e){e.target.composing||t.$set(t.transfer,"notes",e.target.value)}}})])],1),t._v(" "),a("b-col",{attrs:{md:"12"}},[a("b-form-group",[a("b-button",{attrs:{variant:"primary",disabled:t.SubmitProcessing},on:{click:t.Submit_Transfer}},[t._v(t._s(t.$t("submit")))]),t._v(" "),t.SubmitProcessing?t._m(0):t._e()],1)],1)],1)],1)],1)],1)],1)],1),t._v(" "),a("validation-observer",{ref:"Update_Detail_transfer"},[a("b-modal",{attrs:{"hide-footer":"",size:"md",id:"form_Update_Detail",title:t.detail.name}},[a("b-form",{on:{submit:function(e){return e.preventDefault(),t.submit_Update_Detail.apply(null,arguments)}}},[a("b-row",[a("b-col",{attrs:{lg:"12",md:"12",sm:"12"}},[a("validation-provider",{attrs:{name:"Product Cost",rules:{required:!0,regex:/^\d*\.?\d*$/}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("ProductCost")+" *",id:"cost-input"}},[a("b-form-input",{attrs:{label:"Product Cost",state:t.getValidationState(e),"aria-describedby":"cost-feedback"},model:{value:t.detail.Unit_cost,callback:function(e){t.$set(t.detail,"Unit_cost",t._n(e))},expression:"detail.Unit_cost"}}),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"cost-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}])})],1),t._v(" "),a("b-col",{attrs:{lg:"12",md:"12",sm:"12"}},[a("validation-provider",{attrs:{name:"Tax Method",rules:{required:!0}},scopedSlots:t._u([{key:"default",fn:function(e){var s=e.valid,i=e.errors;return a("b-form-group",{attrs:{label:t.$t("TaxMethod")+" *"}},[a("v-select",{class:{"is-invalid":!!i.length},attrs:{state:!i[0]&&(!!s||null),reduce:function(t){return t.value},placeholder:t.$t("Choose_Method"),options:[{label:"Exclusive",value:"1"},{label:"Inclusive",value:"2"}]},model:{value:t.detail.tax_method,callback:function(e){t.$set(t.detail,"tax_method",e)},expression:"detail.tax_method"}}),t._v(" "),a("b-form-invalid-feedback",[t._v(t._s(i[0]))])],1)}}])})],1),t._v(" "),a("b-col",{attrs:{lg:"12",md:"12",sm:"12"}},[a("validation-provider",{attrs:{name:"Order Tax",rules:{required:!0,regex:/^\d*\.?\d*$/}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("OrderTax")+" *"}},[a("b-input-group",{attrs:{append:"%"}},[a("b-form-input",{attrs:{label:"Order Tax",state:t.getValidationState(e),"aria-describedby":"OrderTax-feedback"},model:{value:t.detail.tax_percent,callback:function(e){t.$set(t.detail,"tax_percent",t._n(e))},expression:"detail.tax_percent"}})],1),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"OrderTax-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}])})],1),t._v(" "),a("b-col",{attrs:{lg:"12",md:"12",sm:"12"}},[a("validation-provider",{attrs:{name:"Discount Method",rules:{required:!0}},scopedSlots:t._u([{key:"default",fn:function(e){var s=e.valid,i=e.errors;return a("b-form-group",{attrs:{label:t.$t("Discount_Method")+" *"}},[a("v-select",{class:{"is-invalid":!!i.length},attrs:{reduce:function(t){return t.value},placeholder:t.$t("Choose_Method"),state:!i[0]&&(!!s||null),options:[{label:"Percent %",value:"1"},{label:"Fixed",value:"2"}]},model:{value:t.detail.discount_Method,callback:function(e){t.$set(t.detail,"discount_Method",e)},expression:"detail.discount_Method"}}),t._v(" "),a("b-form-invalid-feedback",[t._v(t._s(i[0]))])],1)}}])})],1),t._v(" "),a("b-col",{attrs:{lg:"12",md:"12",sm:"12"}},[a("validation-provider",{attrs:{name:"Discount Rate",rules:{required:!0,regex:/^\d*\.?\d*$/}},scopedSlots:t._u([{key:"default",fn:function(e){return[a("b-form-group",{attrs:{label:t.$t("Discount")+" *"}},[a("b-form-input",{attrs:{label:"Discount",state:t.getValidationState(e),"aria-describedby":"Discount-feedback"},model:{value:t.detail.discount,callback:function(e){t.$set(t.detail,"discount",t._n(e))},expression:"detail.discount"}}),t._v(" "),a("b-form-invalid-feedback",{attrs:{id:"Discount-feedback"}},[t._v(t._s(e.errors[0]))])],1)]}}])})],1),t._v(" "),a("b-col",{attrs:{md:"12"}},[a("b-form-group",[a("b-button",{attrs:{variant:"primary",type:"submit"}},[t._v(t._s(t.$t("submit")))])],1)],1)],1)],1)],1)],1)],1)}),[function(){var t=this.$createElement,e=this._self._c||t;return e("div",{staticClass:"typo__p"},[e("div",{staticClass:"spinner sm spinner-primary mt-3"})])}],!1,null,null,null).exports}}]);
+"use strict";
+(self["webpackChunk"] = self["webpackChunk"] || []).push([["edit_transfer"],{
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! nprogress */ "./node_modules/nprogress/nprogress.js");
+/* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nprogress__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  metaInfo: {
+    title: "Update Transfer"
+  },
+  data: function data() {
+    return {
+      focused: false,
+      timer: null,
+      search_input: '',
+      product_filter: [],
+      isLoading: true,
+      SubmitProcessing: false,
+      details: [],
+      detail: {
+        quantity: "",
+        discount: "",
+        Unit_cost: "",
+        discount_Method: "",
+        tax_percent: "",
+        tax_method: ""
+      },
+      warehouses: [],
+      products: [],
+      total: 0,
+      GrandTotal: 0,
+      transfer: {
+        id: "",
+        from_warehouse: "",
+        to_warehouse: "",
+        statut: "",
+        notes: "",
+        items: "",
+        date: '',
+        tax_rate: 0,
+        TaxNet: 0,
+        shipping: 0,
+        discount: 0
+      },
+      product: {
+        id: "",
+        code: "",
+        stock: "",
+        quantity: "",
+        discount: "",
+        DiscountNet: "",
+        discount_Method: "",
+        name: "",
+        no_unit: "",
+        unitPurchase: "",
+        purchase_unit_id: "",
+        Net_cost: "",
+        Unit_cost: "",
+        Total_cost: "",
+        subtotal: "",
+        product_id: "",
+        detail_id: "",
+        taxe: "",
+        tax_percent: "",
+        tax_method: "",
+        product_variant_id: "",
+        etat: ""
+      }
+    };
+  },
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(["currentUser"])),
+  methods: {
+    handleFocus: function handleFocus() {
+      this.focused = true;
+    },
+    handleBlur: function handleBlur() {
+      this.focused = false;
+    },
+    //------------- Submit Validation Update Transfer
+    Submit_Transfer: function Submit_Transfer() {
+      var _this = this;
+
+      this.$refs.Edit_transfer.validate().then(function (success) {
+        if (!success) {
+          _this.makeToast("danger", _this.$t("Please_fill_the_form_correctly"), _this.$t("Failed"));
+        } else {
+          _this.Update_Transfer();
+        }
+      });
+    },
+    //---Submit Validation Update Detail
+    submit_Update_Detail: function submit_Update_Detail() {
+      var _this2 = this;
+
+      this.$refs.Update_Detail_transfer.validate().then(function (success) {
+        if (!success) {
+          return;
+        } else {
+          _this2.Update_Detail();
+        }
+      });
+    },
+    //---Validate State Fields
+    getValidationState: function getValidationState(_ref) {
+      var dirty = _ref.dirty,
+          validated = _ref.validated,
+          _ref$valid = _ref.valid,
+          valid = _ref$valid === void 0 ? null : _ref$valid;
+      return dirty || validated ? valid : null;
+    },
+    //---------- Show Modal Update Detail Product
+    Modal_Updat_Detail: function Modal_Updat_Detail(detail) {
+      this.detail = {};
+      this.detail.name = detail.name;
+      this.detail.detail_id = detail.detail_id;
+      this.detail.Unit_cost = detail.Unit_cost;
+      this.detail.tax_method = detail.tax_method;
+      this.detail.discount_Method = detail.discount_Method;
+      this.detail.discount = detail.discount;
+      this.detail.quantity = detail.quantity;
+      this.detail.tax_percent = detail.tax_percent;
+      this.$bvModal.show("form_Update_Detail");
+    },
+    //---------- Submit Update Detail Product
+    Update_Detail: function Update_Detail() {
+      for (var i = 0; i < this.details.length; i++) {
+        if (this.details[i].detail_id === this.detail.detail_id) {
+          this.details[i].tax_percent = this.detail.tax_percent;
+          this.details[i].Unit_cost = this.detail.Unit_cost;
+          this.details[i].quantity = this.detail.quantity;
+          this.details[i].tax_method = this.detail.tax_method;
+          this.details[i].discount_Method = this.detail.discount_Method;
+          this.details[i].discount = this.detail.discount;
+
+          if (this.details[i].discount_Method == "2") {
+            //Fixed
+            this.details[i].DiscountNet = this.detail.discount;
+          } else {
+            //Percentage %
+            this.details[i].DiscountNet = parseFloat(this.detail.Unit_cost * this.details[i].discount / 100);
+          }
+
+          if (this.details[i].tax_method == "1") {
+            //Exclusive
+            this.details[i].Net_cost = parseFloat(this.detail.Unit_cost - this.details[i].DiscountNet);
+            this.details[i].taxe = parseFloat(this.detail.tax_percent * (this.detail.Unit_cost - this.details[i].DiscountNet) / 100);
+          } else {
+            //Inclusive
+            this.details[i].Net_cost = parseFloat((this.detail.Unit_cost - this.details[i].DiscountNet) / (this.detail.tax_percent / 100 + 1));
+            this.details[i].taxe = parseFloat(this.detail.Unit_cost - this.details[i].Net_cost - this.details[i].DiscountNet);
+          }
+
+          this.$forceUpdate();
+        }
+      }
+
+      this.Calcul_Total();
+      this.$bvModal.hide("form_Update_Detail");
+    },
+    //------ Toast
+    makeToast: function makeToast(variant, msg, title) {
+      this.$root.$bvToast.toast(msg, {
+        title: title,
+        variant: variant,
+        solid: true
+      });
+    },
+    // Search Products
+    search: function search() {
+      var _this3 = this;
+
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+
+      if (this.search_input.length < 1) {
+        return this.product_filter = [];
+      }
+
+      if (this.transfer.from_warehouse != "" && this.transfer.from_warehouse != null) {
+        this.timer = setTimeout(function () {
+          var product_filter = _this3.products.filter(function (product) {
+            return product.code === _this3.search_input || product.barcode.includes(_this3.search_input);
+          });
+
+          if (product_filter.length === 1) {
+            _this3.SearchProduct(product_filter[0]);
+          } else {
+            _this3.product_filter = _this3.products.filter(function (product) {
+              return product.name.toLowerCase().includes(_this3.search_input.toLowerCase()) || product.code.toLowerCase().includes(_this3.search_input.toLowerCase()) || product.barcode.toLowerCase().includes(_this3.search_input.toLowerCase());
+            });
+          }
+        }, 800);
+      } else {
+        this.makeToast("warning", this.$t("SelectWarehouse"), this.$t("Warning"));
+      }
+    },
+    // get Result Value Search Product
+    getResultValue: function getResultValue(result) {
+      return result.code + " " + "(" + result.name + ")";
+    },
+    // Submit Search Product
+    SearchProduct: function SearchProduct(result) {
+      this.product = {};
+
+      if (this.details.length > 0 && this.details.some(function (detail) {
+        return detail.code === result.code;
+      })) {
+        this.makeToast("warning", this.$t("AlreadyAdd"), this.$t("Warning"));
+      } else {
+        this.product.code = result.code;
+        this.product.no_unit = 1;
+        this.product.stock = result.qte_purchase;
+
+        if (result.qte_purchase < 1) {
+          this.product.quantity = result.qte_purchase;
+        } else {
+          this.product.quantity = 1;
+        }
+
+        this.product.product_variant_id = result.product_variant_id;
+        this.Get_Product_Details(result.id);
+      }
+
+      this.search_input = '';
+      this.$refs.product_autocomplete.value = "";
+      this.product_filter = [];
+    },
+    //----------------------------------- verified Form ------------------------------\\
+    verifiedForm: function verifiedForm() {
+      if (this.details.length <= 0) {
+        this.makeToast("warning", this.$t("AddProductToList"), this.$t("Warning"));
+        return false;
+      } else if (this.transfer.from_warehouse === this.transfer.to_warehouse) {
+        this.makeToast("warning", this.$t("WarehouseIdentical"), this.$t("Warning"));
+        return false;
+      } else {
+        var count = 0;
+
+        for (var i = 0; i < this.details.length; i++) {
+          if (this.details[i].quantity == "") {
+            count += 1;
+          }
+        }
+
+        if (count > 0) {
+          this.makeToast("warning", this.$t("AddQuantity"), this.$t("Warning"));
+          return false;
+        } else {
+          return true;
+        }
+      }
+    },
+    //-------------------------------- Update Transfer ----------------------\\
+    Update_Transfer: function Update_Transfer() {
+      var _this4 = this;
+
+      if (this.verifiedForm()) {
+        this.SubmitProcessing = true; // Start the progress bar.
+
+        nprogress__WEBPACK_IMPORTED_MODULE_0___default().start();
+        nprogress__WEBPACK_IMPORTED_MODULE_0___default().set(0.1);
+        var id = this.$route.params.id;
+        axios.put("transfers/".concat(id), {
+          transfer: this.transfer,
+          details: this.details,
+          GrandTotal: this.GrandTotal
+        }).then(function (response) {
+          // Complete the animation of theprogress bar.
+          nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+          _this4.SubmitProcessing = false;
+
+          _this4.$router.push({
+            name: "index_transfer"
+          });
+
+          _this4.makeToast("success", _this4.$t("Update.TitleTransfer"), _this4.$t("Success"));
+        })["catch"](function (error) {
+          // Complete the animation of theprogress bar.
+          nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+
+          _this4.makeToast("danger", _this4.$t("InvalidData"), _this4.$t("Failed"));
+
+          _this4.SubmitProcessing = false;
+        });
+      }
+    },
+    //-------------------------------- Get Last Detail Id -------------------------\\
+    Last_Detail_id: function Last_Detail_id() {
+      this.product.detail_id = 0;
+      var len = this.details.length;
+      this.product.detail_id = this.details[len - 1].detail_id + 1;
+    },
+    //----------------------------------------- Add product to order list -------------------------\\
+    add_product: function add_product() {
+      if (this.details.length > 0) {
+        this.Last_Detail_id();
+      } else if (this.details.length === 0) {
+        this.product.detail_id = 1;
+      }
+
+      this.details.push(this.product);
+    },
+    //-----------------------------------Verified QTY ------------------------------\\
+    Verified_Qty: function Verified_Qty(detail, id) {
+      for (var i = 0; i < this.details.length; i++) {
+        if (this.details[i].detail_id === id) {
+          if (isNaN(detail.quantity)) {
+            this.details[i].quantity = detail.qte_copy;
+          }
+
+          if (detail.etat == "new" && detail.quantity > detail.stock) {
+            this.makeToast("warning", this.$t("LowStock"), this.$t("Warning"));
+            this.details[i].quantity = detail.stock;
+          } else if (detail.etat == "current" && detail.quantity > detail.stock + detail.qte_copy) {
+            this.makeToast("warning", this.$t("LowStock"), this.$t("Warning"));
+            this.details[i].quantity = detail.qte_copy;
+          } else {
+            this.details[i].quantity = detail.quantity;
+          }
+        }
+      }
+
+      this.$forceUpdate();
+      this.Calcul_Total();
+    },
+    //-----------------------------------increment QTY ------------------------------\\
+    increment: function increment(detail, id) {
+      for (var i = 0; i < this.details.length; i++) {
+        if (this.details[i].detail_id == id) {
+          if (detail.etat == "new" && detail.quantity + 1 > detail.stock) {
+            this.makeToast("warning", this.$t("LowStock"), this.$t("Warning"));
+          } else if (detail.etat == "current" && detail.quantity + 1 > detail.stock + detail.qte_copy) {
+            this.makeToast("warning", this.$t("LowStock"), this.$t("Warning"));
+          } else {
+            this.formatNumber(this.details[i].quantity++, 2);
+          }
+        }
+      }
+
+      this.$forceUpdate();
+      this.Calcul_Total();
+    },
+    //-----------------------------------decrement QTY ------------------------------\\
+    decrement: function decrement(detail, id) {
+      for (var i = 0; i < this.details.length; i++) {
+        if (this.details[i].detail_id == id) {
+          if (detail.quantity - 1 > 0) {
+            if (detail.etat == "new" && detail.quantity - 1 > detail.stock) {
+              this.makeToast("warning", this.$t("LowStock"), this.$t("Warning"));
+            } else if (detail.etat == "current" && detail.quantity - 1 > detail.stock + detail.qte_copy) {
+              this.makeToast("warning", this.$t("LowStock"), this.$t("Warning"));
+            } else {
+              this.formatNumber(this.details[i].quantity--, 2);
+            }
+          }
+        }
+      }
+
+      this.$forceUpdate();
+      this.Calcul_Total();
+    },
+    //-----------------------------------------Calcul Total ------------------------------\\
+    Calcul_Total: function Calcul_Total() {
+      this.total = 0;
+
+      for (var index = 0; index < this.details.length; index++) {
+        var tax = this.details[index].taxe * this.details[index].quantity;
+        this.details[index].subtotal = parseFloat(this.details[index].quantity * this.details[index].Net_cost + tax);
+        this.total = parseFloat(this.total + this.details[index].subtotal);
+      }
+
+      var total_without_discount = parseFloat(this.total - this.transfer.discount);
+      this.transfer.TaxNet = parseFloat(total_without_discount * this.transfer.tax_rate / 100);
+      this.GrandTotal = parseFloat(total_without_discount + this.transfer.TaxNet + this.transfer.shipping);
+      var grand_total = this.GrandTotal.toFixed(2);
+      this.GrandTotal = parseFloat(grand_total);
+    },
+    //-----------------------------------Delete Detail Product ------------------------------\\
+    delete_Product_Detail: function delete_Product_Detail(id) {
+      for (var i = 0; i < this.details.length; i++) {
+        if (id === this.details[i].detail_id) {
+          this.details.splice(i, 1);
+          this.Calcul_Total();
+        }
+      }
+    },
+    //---------- keyup OrderTax
+    keyup_OrderTax: function keyup_OrderTax() {
+      if (isNaN(this.transfer.tax_rate)) {
+        this.transfer.tax_rate = 0;
+      } else if (this.transfer.tax_rate == '') {
+        this.transfer.tax_rate = 0;
+        this.Calcul_Total();
+      } else {
+        this.Calcul_Total();
+      }
+    },
+    //---------- keyup Discount
+    keyup_Discount: function keyup_Discount() {
+      if (isNaN(this.transfer.discount)) {
+        this.transfer.discount = 0;
+      } else if (this.transfer.discount == '') {
+        this.transfer.discount = 0;
+        this.Calcul_Total();
+      } else {
+        this.Calcul_Total();
+      }
+    },
+    //---------- keyup Shipping
+    keyup_Shipping: function keyup_Shipping() {
+      if (isNaN(this.transfer.shipping)) {
+        this.transfer.shipping = 0;
+      } else if (this.transfer.shipping == '') {
+        this.transfer.shipping = 0;
+        this.Calcul_Total();
+      } else {
+        this.Calcul_Total();
+      }
+    },
+    //------------------------------Formetted Numbers -------------------------\\
+    formatNumber: function formatNumber(number, dec) {
+      var value = (typeof number === "string" ? number : number.toString()).split(".");
+      if (dec <= 0) return value[0];
+      var formated = value[1] || "";
+      if (formated.length > dec) return "".concat(value[0], ".").concat(formated.substr(0, dec));
+
+      while (formated.length < dec) {
+        formated += "0";
+      }
+
+      return "".concat(value[0], ".").concat(formated);
+    },
+    //------------------------------------ Get Products By Warehouse -------------------------\\
+    Get_Products_By_Warehouse: function Get_Products_By_Warehouse(id) {
+      var _this5 = this;
+
+      // Start the progress bar.
+      nprogress__WEBPACK_IMPORTED_MODULE_0___default().start();
+      nprogress__WEBPACK_IMPORTED_MODULE_0___default().set(0.1);
+      axios.get("Products/Warehouse/" + id + "?stock=" + 1).then(function (response) {
+        _this5.products = response.data;
+        nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+      })["catch"](function (error) {});
+    },
+    //---------------------------------Get Product Details ------------------------\\
+    Get_Product_Details: function Get_Product_Details(product_id) {
+      var _this6 = this;
+
+      axios.get("Products/" + product_id).then(function (response) {
+        _this6.product.discount = 0;
+        _this6.product.DiscountNet = 0;
+        _this6.product.discount_Method = "2";
+        _this6.product.del = 0;
+        _this6.product.id = 0;
+        _this6.product.etat = "new";
+        _this6.product.product_id = response.data.id;
+        _this6.product.name = response.data.name;
+        _this6.product.Net_cost = response.data.Net_cost;
+        _this6.product.Unit_cost = response.data.Unit_cost;
+        _this6.product.taxe = response.data.tax_cost;
+        _this6.product.tax_method = response.data.tax_method;
+        _this6.product.tax_percent = response.data.tax_percent;
+        _this6.product.unitPurchase = response.data.unitPurchase;
+        _this6.product.purchase_unit_id = response.data.purchase_unit_id;
+
+        _this6.add_product();
+
+        _this6.Calcul_Total();
+      });
+    },
+    //---------------------- Event Select From Warehouse ------------------------------\\
+    Selected_From_Warehouse: function Selected_From_Warehouse(value) {
+      this.search_input = '';
+      this.product_filter = [];
+      this.Get_Products_By_Warehouse(value);
+    },
+    //---------------------------------------Get Elements ------------------------------\\
+    GetElements: function GetElements() {
+      var _this7 = this;
+
+      var id = this.$route.params.id;
+      axios.get("transfers/".concat(id, "/edit")).then(function (response) {
+        _this7.transfer = response.data.transfer;
+        _this7.details = response.data.details;
+        _this7.warehouses = response.data.warehouses;
+
+        _this7.Get_Products_By_Warehouse(_this7.transfer.from_warehouse);
+
+        _this7.Calcul_Total();
+
+        _this7.isLoading = false;
+      })["catch"](function (response) {
+        setTimeout(function () {
+          _this7.isLoading = false;
+        }, 500);
+      });
+    }
+  },
+  //----------------------------- Created Function-------------------
+  created: function created() {
+    this.GetElements();
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/transfers/edit_transfer.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/src/views/app/pages/transfers/edit_transfer.vue ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _edit_transfer_vue_vue_type_template_id_09285268___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./edit_transfer.vue?vue&type=template&id=09285268& */ "./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=template&id=09285268&");
+/* harmony import */ var _edit_transfer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit_transfer.vue?vue&type=script&lang=js& */ "./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _edit_transfer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _edit_transfer_vue_vue_type_template_id_09285268___WEBPACK_IMPORTED_MODULE_0__.render,
+  _edit_transfer_vue_vue_type_template_id_09285268___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/src/views/app/pages/transfers/edit_transfer.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_edit_transfer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./edit_transfer.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_edit_transfer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=template&id=09285268&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=template&id=09285268& ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_edit_transfer_vue_vue_type_template_id_09285268___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_edit_transfer_vue_vue_type_template_id_09285268___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_edit_transfer_vue_vue_type_template_id_09285268___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./edit_transfer.vue?vue&type=template&id=09285268& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=template&id=09285268&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=template&id=09285268&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/transfers/edit_transfer.vue?vue&type=template&id=09285268& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "main-content" },
+    [
+      _c("breadcumb", {
+        attrs: {
+          page: _vm.$t("EditTransfer"),
+          folder: _vm.$t("ListTransfers"),
+        },
+      }),
+      _vm._v(" "),
+      _vm.isLoading
+        ? _c("div", {
+            staticClass: "loading_page spinner spinner-primary mr-3",
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.isLoading
+        ? _c(
+            "validation-observer",
+            { ref: "Edit_transfer" },
+            [
+              _c(
+                "b-form",
+                {
+                  on: {
+                    submit: function ($event) {
+                      $event.preventDefault()
+                      return _vm.Submit_Transfer.apply(null, arguments)
+                    },
+                  },
+                },
+                [
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        { attrs: { lg: "12", md: "12", sm: "12" } },
+                        [
+                          _c(
+                            "b-card",
+                            [
+                              _c(
+                                "b-row",
+                                [
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-3",
+                                      attrs: { lg: "4", md: "4", sm: "12" },
+                                    },
+                                    [
+                                      _c("validation-provider", {
+                                        attrs: {
+                                          name: "date",
+                                          rules: { required: true },
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function (validationContext) {
+                                                return [
+                                                  _c(
+                                                    "b-form-group",
+                                                    {
+                                                      attrs: {
+                                                        label:
+                                                          _vm.$t("date") +
+                                                          " " +
+                                                          "*",
+                                                      },
+                                                    },
+                                                    [
+                                                      _c("b-form-input", {
+                                                        attrs: {
+                                                          state:
+                                                            _vm.getValidationState(
+                                                              validationContext
+                                                            ),
+                                                          "aria-describedby":
+                                                            "date-feedback",
+                                                          type: "date",
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.transfer.date,
+                                                          callback: function (
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.transfer,
+                                                              "date",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "transfer.date",
+                                                        },
+                                                      }),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "b-form-invalid-feedback",
+                                                        {
+                                                          attrs: {
+                                                            id: "OrderTax-feedback",
+                                                          },
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              validationContext
+                                                                .errors[0]
+                                                            )
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    ],
+                                                    1
+                                                  ),
+                                                ]
+                                              },
+                                            },
+                                          ],
+                                          null,
+                                          false,
+                                          3120178706
+                                        ),
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-3",
+                                      attrs: { lg: "4", md: "4", sm: "12" },
+                                    },
+                                    [
+                                      _c("validation-provider", {
+                                        attrs: {
+                                          name: "From Warehouse",
+                                          rules: { required: true },
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function (ref) {
+                                                var valid = ref.valid
+                                                var errors = ref.errors
+                                                return _c(
+                                                  "b-form-group",
+                                                  {
+                                                    attrs: {
+                                                      label:
+                                                        _vm.$t(
+                                                          "FromWarehouse"
+                                                        ) +
+                                                        " " +
+                                                        "*",
+                                                    },
+                                                  },
+                                                  [
+                                                    _c("v-select", {
+                                                      class: {
+                                                        "is-invalid":
+                                                          !!errors.length,
+                                                      },
+                                                      attrs: {
+                                                        state: errors[0]
+                                                          ? false
+                                                          : valid
+                                                          ? true
+                                                          : null,
+                                                        disabled:
+                                                          _vm.details.length >
+                                                          0,
+                                                        reduce: function (
+                                                          label
+                                                        ) {
+                                                          return label.value
+                                                        },
+                                                        placeholder:
+                                                          _vm.$t(
+                                                            "Choose_Warehouse"
+                                                          ),
+                                                        options:
+                                                          _vm.warehouses.map(
+                                                            function (
+                                                              warehouses
+                                                            ) {
+                                                              return {
+                                                                label:
+                                                                  warehouses.name,
+                                                                value:
+                                                                  warehouses.id,
+                                                              }
+                                                            }
+                                                          ),
+                                                      },
+                                                      on: {
+                                                        input:
+                                                          _vm.Selected_From_Warehouse,
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.transfer
+                                                            .from_warehouse,
+                                                        callback: function (
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.transfer,
+                                                            "from_warehouse",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "transfer.from_warehouse",
+                                                      },
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "b-form-invalid-feedback",
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(errors[0])
+                                                        ),
+                                                      ]
+                                                    ),
+                                                  ],
+                                                  1
+                                                )
+                                              },
+                                            },
+                                          ],
+                                          null,
+                                          false,
+                                          196005589
+                                        ),
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-3",
+                                      attrs: { lg: "4", md: "4", sm: "12" },
+                                    },
+                                    [
+                                      _c("validation-provider", {
+                                        attrs: {
+                                          name: "To Warehouse",
+                                          rules: { required: true },
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function (ref) {
+                                                var valid = ref.valid
+                                                var errors = ref.errors
+                                                return _c(
+                                                  "b-form-group",
+                                                  {
+                                                    attrs: {
+                                                      label:
+                                                        _vm.$t("ToWarehouse") +
+                                                        " " +
+                                                        "*",
+                                                    },
+                                                  },
+                                                  [
+                                                    _c("v-select", {
+                                                      class: {
+                                                        "is-invalid":
+                                                          !!errors.length,
+                                                      },
+                                                      attrs: {
+                                                        state: errors[0]
+                                                          ? false
+                                                          : valid
+                                                          ? true
+                                                          : null,
+                                                        reduce: function (
+                                                          label
+                                                        ) {
+                                                          return label.value
+                                                        },
+                                                        placeholder:
+                                                          _vm.$t(
+                                                            "Choose_Warehouse"
+                                                          ),
+                                                        options:
+                                                          _vm.warehouses.map(
+                                                            function (
+                                                              warehouses
+                                                            ) {
+                                                              return {
+                                                                label:
+                                                                  warehouses.name,
+                                                                value:
+                                                                  warehouses.id,
+                                                              }
+                                                            }
+                                                          ),
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.transfer
+                                                            .to_warehouse,
+                                                        callback: function (
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.transfer,
+                                                            "to_warehouse",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "transfer.to_warehouse",
+                                                      },
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "b-form-invalid-feedback",
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(errors[0])
+                                                        ),
+                                                      ]
+                                                    ),
+                                                  ],
+                                                  1
+                                                )
+                                              },
+                                            },
+                                          ],
+                                          null,
+                                          false,
+                                          2600691786
+                                        ),
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-5",
+                                      attrs: { md: "12" },
+                                    },
+                                    [
+                                      _c("h6", [
+                                        _vm._v(_vm._s(_vm.$t("ProductName"))),
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "autocomplete",
+                                          attrs: { id: "autocomplete" },
+                                        },
+                                        [
+                                          _c("input", {
+                                            ref: "product_autocomplete",
+                                            staticClass: "autocomplete-input",
+                                            attrs: {
+                                              placeholder: _vm.$t(
+                                                "Scan_Search_Product_by_Code_Name"
+                                              ),
+                                            },
+                                            on: {
+                                              input: function (e) {
+                                                return (_vm.search_input =
+                                                  e.target.value)
+                                              },
+                                              keyup: function ($event) {
+                                                return _vm.search(
+                                                  _vm.search_input
+                                                )
+                                              },
+                                              focus: _vm.handleFocus,
+                                              blur: _vm.handleBlur,
+                                            },
+                                          }),
+                                          _vm._v(" "),
+                                          _c(
+                                            "ul",
+                                            {
+                                              directives: [
+                                                {
+                                                  name: "show",
+                                                  rawName: "v-show",
+                                                  value: _vm.focused,
+                                                  expression: "focused",
+                                                },
+                                              ],
+                                              staticClass:
+                                                "autocomplete-result-list",
+                                            },
+                                            _vm._l(
+                                              _vm.product_filter,
+                                              function (product_fil) {
+                                                return _c(
+                                                  "li",
+                                                  {
+                                                    staticClass:
+                                                      "autocomplete-result",
+                                                    on: {
+                                                      mousedown: function (
+                                                        $event
+                                                      ) {
+                                                        return _vm.SearchProduct(
+                                                          product_fil
+                                                        )
+                                                      },
+                                                    },
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        _vm.getResultValue(
+                                                          product_fil
+                                                        )
+                                                      )
+                                                    ),
+                                                  ]
+                                                )
+                                              }
+                                            ),
+                                            0
+                                          ),
+                                        ]
+                                      ),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("b-col", { attrs: { md: "12" } }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "table-responsive" },
+                                      [
+                                        _c(
+                                          "table",
+                                          { staticClass: "table table-hover" },
+                                          [
+                                            _c(
+                                              "thead",
+                                              { staticClass: "bg-gray-300" },
+                                              [
+                                                _c("tr", [
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [_vm._v("#")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.$t("ProductName")
+                                                        )
+                                                      ),
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.$t(
+                                                            "Net_Unit_Cost"
+                                                          )
+                                                        )
+                                                      ),
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.$t("CurrentStock")
+                                                        )
+                                                      ),
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(_vm.$t("Qty"))
+                                                      ),
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.$t("Discount")
+                                                        )
+                                                      ),
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(_vm.$t("Tax"))
+                                                      ),
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    { attrs: { scope: "col" } },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.$t("SubTotal")
+                                                        )
+                                                      ),
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "th",
+                                                    {
+                                                      staticClass:
+                                                        "text-center",
+                                                      attrs: { scope: "col" },
+                                                    },
+                                                    [
+                                                      _c("i", {
+                                                        staticClass:
+                                                          "fa fa-trash",
+                                                      }),
+                                                    ]
+                                                  ),
+                                                ]),
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "tbody",
+                                              [
+                                                _vm.details.length <= 0
+                                                  ? _c("tr", [
+                                                      _c(
+                                                        "td",
+                                                        {
+                                                          attrs: {
+                                                            colspan: "9",
+                                                          },
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm.$t(
+                                                                "NodataAvailable"
+                                                              )
+                                                            )
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    ])
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                _vm._l(
+                                                  _vm.details,
+                                                  function (detail) {
+                                                    return _c(
+                                                      "tr",
+                                                      {
+                                                        key: detail.detail_id,
+                                                        class: {
+                                                          row_deleted:
+                                                            detail.del === 1 ||
+                                                            detail.no_unit ===
+                                                              0,
+                                                        },
+                                                      },
+                                                      [
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              detail.detail_id
+                                                            )
+                                                          ),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _c("span", [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                detail.code
+                                                              )
+                                                            ),
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("br"),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              staticClass:
+                                                                "badge badge-success",
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  detail.name
+                                                                )
+                                                              ),
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c("i", {
+                                                            directives: [
+                                                              {
+                                                                name: "show",
+                                                                rawName:
+                                                                  "v-show",
+                                                                value:
+                                                                  detail.no_unit !==
+                                                                  0,
+                                                                expression:
+                                                                  "detail.no_unit !== 0",
+                                                              },
+                                                            ],
+                                                            staticClass:
+                                                              "i-Edit",
+                                                            on: {
+                                                              click: function (
+                                                                $event
+                                                              ) {
+                                                                return _vm.Modal_Updat_Detail(
+                                                                  detail
+                                                                )
+                                                              },
+                                                            },
+                                                          }),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm.currentUser
+                                                                .currency
+                                                            ) +
+                                                              " " +
+                                                              _vm._s(
+                                                                _vm.formatNumber(
+                                                                  detail.Net_cost,
+                                                                  3
+                                                                )
+                                                              )
+                                                          ),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              staticClass:
+                                                                "badge badge-outline-warning",
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  detail.stock
+                                                                ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    detail.unitPurchase
+                                                                  )
+                                                              ),
+                                                            ]
+                                                          ),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "quantity",
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "b-input-group",
+                                                                [
+                                                                  _c(
+                                                                    "b-input-group-prepend",
+                                                                    [
+                                                                      _c(
+                                                                        "span",
+                                                                        {
+                                                                          directives:
+                                                                            [
+                                                                              {
+                                                                                name: "show",
+                                                                                rawName:
+                                                                                  "v-show",
+                                                                                value:
+                                                                                  detail.no_unit !==
+                                                                                  0,
+                                                                                expression:
+                                                                                  "detail.no_unit !== 0",
+                                                                              },
+                                                                            ],
+                                                                          staticClass:
+                                                                            "btn btn-primary btn-sm",
+                                                                          on: {
+                                                                            click:
+                                                                              function (
+                                                                                $event
+                                                                              ) {
+                                                                                return _vm.decrement(
+                                                                                  detail,
+                                                                                  detail.detail_id
+                                                                                )
+                                                                              },
+                                                                          },
+                                                                        },
+                                                                        [
+                                                                          _vm._v(
+                                                                            "-"
+                                                                          ),
+                                                                        ]
+                                                                      ),
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c("input", {
+                                                                    directives:
+                                                                      [
+                                                                        {
+                                                                          name: "model",
+                                                                          rawName:
+                                                                            "v-model.number",
+                                                                          value:
+                                                                            detail.quantity,
+                                                                          expression:
+                                                                            "detail.quantity",
+                                                                          modifiers:
+                                                                            {
+                                                                              number: true,
+                                                                            },
+                                                                        },
+                                                                      ],
+                                                                    staticClass:
+                                                                      "form-control",
+                                                                    attrs: {
+                                                                      disabled:
+                                                                        detail.del ===
+                                                                          1 ||
+                                                                        detail.no_unit ===
+                                                                          0,
+                                                                    },
+                                                                    domProps: {
+                                                                      value:
+                                                                        detail.quantity,
+                                                                    },
+                                                                    on: {
+                                                                      keyup:
+                                                                        function (
+                                                                          $event
+                                                                        ) {
+                                                                          return _vm.Verified_Qty(
+                                                                            detail,
+                                                                            detail.detail_id
+                                                                          )
+                                                                        },
+                                                                      input:
+                                                                        function (
+                                                                          $event
+                                                                        ) {
+                                                                          if (
+                                                                            $event
+                                                                              .target
+                                                                              .composing
+                                                                          ) {
+                                                                            return
+                                                                          }
+                                                                          _vm.$set(
+                                                                            detail,
+                                                                            "quantity",
+                                                                            _vm._n(
+                                                                              $event
+                                                                                .target
+                                                                                .value
+                                                                            )
+                                                                          )
+                                                                        },
+                                                                      blur: function (
+                                                                        $event
+                                                                      ) {
+                                                                        return _vm.$forceUpdate()
+                                                                      },
+                                                                    },
+                                                                  }),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "b-input-group-append",
+                                                                    [
+                                                                      _c(
+                                                                        "span",
+                                                                        {
+                                                                          directives:
+                                                                            [
+                                                                              {
+                                                                                name: "show",
+                                                                                rawName:
+                                                                                  "v-show",
+                                                                                value:
+                                                                                  detail.no_unit !==
+                                                                                  0,
+                                                                                expression:
+                                                                                  "detail.no_unit !== 0",
+                                                                              },
+                                                                            ],
+                                                                          staticClass:
+                                                                            "btn btn-primary btn-sm",
+                                                                          on: {
+                                                                            click:
+                                                                              function (
+                                                                                $event
+                                                                              ) {
+                                                                                return _vm.increment(
+                                                                                  detail,
+                                                                                  detail.detail_id
+                                                                                )
+                                                                              },
+                                                                          },
+                                                                        },
+                                                                        [
+                                                                          _vm._v(
+                                                                            "+"
+                                                                          ),
+                                                                        ]
+                                                                      ),
+                                                                    ]
+                                                                  ),
+                                                                ],
+                                                                1
+                                                              ),
+                                                            ],
+                                                            1
+                                                          ),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm.currentUser
+                                                                .currency
+                                                            ) +
+                                                              " " +
+                                                              _vm._s(
+                                                                _vm.formatNumber(
+                                                                  detail.DiscountNet *
+                                                                    detail.quantity,
+                                                                  2
+                                                                )
+                                                              )
+                                                          ),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm.currentUser
+                                                                .currency
+                                                            ) +
+                                                              " " +
+                                                              _vm._s(
+                                                                _vm.formatNumber(
+                                                                  detail.taxe *
+                                                                    detail.quantity,
+                                                                  2
+                                                                )
+                                                              )
+                                                          ),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm.currentUser
+                                                                .currency
+                                                            ) +
+                                                              " " +
+                                                              _vm._s(
+                                                                detail.subtotal.toFixed(
+                                                                  2
+                                                                )
+                                                              )
+                                                          ),
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _c(
+                                                            "a",
+                                                            {
+                                                              directives: [
+                                                                {
+                                                                  name: "show",
+                                                                  rawName:
+                                                                    "v-show",
+                                                                  value:
+                                                                    detail.no_unit !==
+                                                                    0,
+                                                                  expression:
+                                                                    "detail.no_unit !== 0",
+                                                                },
+                                                              ],
+                                                              staticClass:
+                                                                "btn btn-icon btn-sm",
+                                                              attrs: {
+                                                                title: "Delete",
+                                                              },
+                                                              on: {
+                                                                click:
+                                                                  function (
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.delete_Product_Detail(
+                                                                      detail.detail_id
+                                                                    )
+                                                                  },
+                                                              },
+                                                            },
+                                                            [
+                                                              _c("i", {
+                                                                staticClass:
+                                                                  "i-Close-Window text-25 text-danger",
+                                                              }),
+                                                            ]
+                                                          ),
+                                                        ]),
+                                                      ]
+                                                    )
+                                                  }
+                                                ),
+                                              ],
+                                              2
+                                            ),
+                                          ]
+                                        ),
+                                      ]
+                                    ),
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "offset-md-9 col-md-3 mt-4",
+                                    },
+                                    [
+                                      _c(
+                                        "table",
+                                        {
+                                          staticClass:
+                                            "table table-striped table-sm",
+                                        },
+                                        [
+                                          _c("tbody", [
+                                            _c("tr", [
+                                              _c(
+                                                "td",
+                                                { staticClass: "bold" },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(_vm.$t("OrderTax"))
+                                                  ),
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _c("span", [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.currentUser.currency
+                                                    ) +
+                                                      " " +
+                                                      _vm._s(
+                                                        _vm.transfer.TaxNet.toFixed(
+                                                          2
+                                                        )
+                                                      ) +
+                                                      " (" +
+                                                      _vm._s(
+                                                        _vm.formatNumber(
+                                                          _vm.transfer.tax_rate,
+                                                          2
+                                                        )
+                                                      ) +
+                                                      " %)"
+                                                  ),
+                                                ]),
+                                              ]),
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c(
+                                                "td",
+                                                { staticClass: "bold" },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(_vm.$t("Discount"))
+                                                  ),
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.currentUser.currency
+                                                  ) +
+                                                    " " +
+                                                    _vm._s(
+                                                      _vm.transfer.discount.toFixed(
+                                                        2
+                                                      )
+                                                    )
+                                                ),
+                                              ]),
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c(
+                                                "td",
+                                                { staticClass: "bold" },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(_vm.$t("Shipping"))
+                                                  ),
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.currentUser.currency
+                                                  ) +
+                                                    " " +
+                                                    _vm._s(
+                                                      _vm.transfer.shipping.toFixed(
+                                                        2
+                                                      )
+                                                    )
+                                                ),
+                                              ]),
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "font-weight-bold",
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(_vm.$t("Total"))
+                                                    ),
+                                                  ]
+                                                ),
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "font-weight-bold",
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        _vm.currentUser.currency
+                                                      ) +
+                                                        " " +
+                                                        _vm._s(
+                                                          _vm.GrandTotal.toFixed(
+                                                            2
+                                                          )
+                                                        )
+                                                    ),
+                                                  ]
+                                                ),
+                                              ]),
+                                            ]),
+                                          ]),
+                                        ]
+                                      ),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-3",
+                                      attrs: { lg: "4", md: "4", sm: "12" },
+                                    },
+                                    [
+                                      _c("validation-provider", {
+                                        attrs: {
+                                          name: "Order Tax",
+                                          rules: { regex: /^\d*\.?\d*$/ },
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function (validationContext) {
+                                                return [
+                                                  _c(
+                                                    "b-form-group",
+                                                    {
+                                                      attrs: {
+                                                        label:
+                                                          _vm.$t("OrderTax"),
+                                                      },
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "b-input-group",
+                                                        {
+                                                          attrs: {
+                                                            append: "%",
+                                                          },
+                                                        },
+                                                        [
+                                                          _c("b-form-input", {
+                                                            attrs: {
+                                                              state:
+                                                                _vm.getValidationState(
+                                                                  validationContext
+                                                                ),
+                                                              "aria-describedby":
+                                                                "OrderTax-feedback",
+                                                              label:
+                                                                "Order Tax",
+                                                            },
+                                                            on: {
+                                                              keyup: function (
+                                                                $event
+                                                              ) {
+                                                                return _vm.keyup_OrderTax()
+                                                              },
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.transfer
+                                                                  .tax_rate,
+                                                              callback:
+                                                                function ($$v) {
+                                                                  _vm.$set(
+                                                                    _vm.transfer,
+                                                                    "tax_rate",
+                                                                    _vm._n($$v)
+                                                                  )
+                                                                },
+                                                              expression:
+                                                                "transfer.tax_rate",
+                                                            },
+                                                          }),
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "b-form-invalid-feedback",
+                                                        {
+                                                          attrs: {
+                                                            id: "OrderTax-feedback",
+                                                          },
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              validationContext
+                                                                .errors[0]
+                                                            )
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    ],
+                                                    1
+                                                  ),
+                                                ]
+                                              },
+                                            },
+                                          ],
+                                          null,
+                                          false,
+                                          907389170
+                                        ),
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-3",
+                                      attrs: { lg: "4", md: "4", sm: "12" },
+                                    },
+                                    [
+                                      _c("validation-provider", {
+                                        attrs: {
+                                          name: "Discount",
+                                          rules: { regex: /^\d*\.?\d*$/ },
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function (validationContext) {
+                                                return [
+                                                  _c(
+                                                    "b-form-group",
+                                                    {
+                                                      attrs: {
+                                                        label:
+                                                          _vm.$t("Discount"),
+                                                      },
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "b-input-group",
+                                                        {
+                                                          attrs: {
+                                                            append:
+                                                              _vm.currentUser
+                                                                .currency,
+                                                          },
+                                                        },
+                                                        [
+                                                          _c("b-form-input", {
+                                                            attrs: {
+                                                              state:
+                                                                _vm.getValidationState(
+                                                                  validationContext
+                                                                ),
+                                                              "aria-describedby":
+                                                                "Discount-feedback",
+                                                              label: "Discount",
+                                                            },
+                                                            on: {
+                                                              keyup: function (
+                                                                $event
+                                                              ) {
+                                                                return _vm.keyup_Discount()
+                                                              },
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.transfer
+                                                                  .discount,
+                                                              callback:
+                                                                function ($$v) {
+                                                                  _vm.$set(
+                                                                    _vm.transfer,
+                                                                    "discount",
+                                                                    _vm._n($$v)
+                                                                  )
+                                                                },
+                                                              expression:
+                                                                "transfer.discount",
+                                                            },
+                                                          }),
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "b-form-invalid-feedback",
+                                                        {
+                                                          attrs: {
+                                                            id: "Discount-feedback",
+                                                          },
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              validationContext
+                                                                .errors[0]
+                                                            )
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    ],
+                                                    1
+                                                  ),
+                                                ]
+                                              },
+                                            },
+                                          ],
+                                          null,
+                                          false,
+                                          3103063445
+                                        ),
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-3",
+                                      attrs: { lg: "4", md: "4", sm: "12" },
+                                    },
+                                    [
+                                      _c("validation-provider", {
+                                        attrs: {
+                                          name: "Shipping",
+                                          rules: { regex: /^\d*\.?\d*$/ },
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function (validationContext) {
+                                                return [
+                                                  _c(
+                                                    "b-form-group",
+                                                    {
+                                                      attrs: {
+                                                        label:
+                                                          _vm.$t("Shipping"),
+                                                      },
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "b-input-group",
+                                                        {
+                                                          attrs: {
+                                                            append:
+                                                              _vm.currentUser
+                                                                .currency,
+                                                          },
+                                                        },
+                                                        [
+                                                          _c("b-form-input", {
+                                                            attrs: {
+                                                              state:
+                                                                _vm.getValidationState(
+                                                                  validationContext
+                                                                ),
+                                                              "aria-describedby":
+                                                                "Shipping-feedback",
+                                                              label: "Shipping",
+                                                            },
+                                                            on: {
+                                                              keyup: function (
+                                                                $event
+                                                              ) {
+                                                                return _vm.keyup_Shipping()
+                                                              },
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.transfer
+                                                                  .shipping,
+                                                              callback:
+                                                                function ($$v) {
+                                                                  _vm.$set(
+                                                                    _vm.transfer,
+                                                                    "shipping",
+                                                                    _vm._n($$v)
+                                                                  )
+                                                                },
+                                                              expression:
+                                                                "transfer.shipping",
+                                                            },
+                                                          }),
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "b-form-invalid-feedback",
+                                                        {
+                                                          attrs: {
+                                                            id: "Shipping-feedback",
+                                                          },
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              validationContext
+                                                                .errors[0]
+                                                            )
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    ],
+                                                    1
+                                                  ),
+                                                ]
+                                              },
+                                            },
+                                          ],
+                                          null,
+                                          false,
+                                          1389454933
+                                        ),
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    {
+                                      staticClass: "mb-3",
+                                      attrs: { lg: "4", md: "4", sm: "12" },
+                                    },
+                                    [
+                                      _c("validation-provider", {
+                                        attrs: {
+                                          name: "Status",
+                                          rules: { required: true },
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function (ref) {
+                                                var valid = ref.valid
+                                                var errors = ref.errors
+                                                return _c(
+                                                  "b-form-group",
+                                                  {
+                                                    attrs: {
+                                                      label:
+                                                        _vm.$t("Status") +
+                                                        " " +
+                                                        "*",
+                                                    },
+                                                  },
+                                                  [
+                                                    _c("v-select", {
+                                                      class: {
+                                                        "is-invalid":
+                                                          !!errors.length,
+                                                      },
+                                                      attrs: {
+                                                        state: errors[0]
+                                                          ? false
+                                                          : valid
+                                                          ? true
+                                                          : null,
+                                                        reduce: function (
+                                                          label
+                                                        ) {
+                                                          return label.value
+                                                        },
+                                                        placeholder:
+                                                          _vm.$t(
+                                                            "Choose_Status"
+                                                          ),
+                                                        options: [
+                                                          {
+                                                            label: "Completed",
+                                                            value: "completed",
+                                                          },
+                                                          {
+                                                            label: "Sent",
+                                                            value: "sent",
+                                                          },
+                                                          {
+                                                            label: "Pending",
+                                                            value: "pending",
+                                                          },
+                                                        ],
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.transfer.statut,
+                                                        callback: function (
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.transfer,
+                                                            "statut",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "transfer.statut",
+                                                      },
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "b-form-invalid-feedback",
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(errors[0])
+                                                        ),
+                                                      ]
+                                                    ),
+                                                  ],
+                                                  1
+                                                )
+                                              },
+                                            },
+                                          ],
+                                          null,
+                                          false,
+                                          524404404
+                                        ),
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    { attrs: { md: "12" } },
+                                    [
+                                      _c(
+                                        "b-form-group",
+                                        { attrs: { label: _vm.$t("Note") } },
+                                        [
+                                          _c("textarea", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: _vm.transfer.notes,
+                                                expression: "transfer.notes",
+                                              },
+                                            ],
+                                            staticClass: "form-control",
+                                            attrs: {
+                                              rows: "4",
+                                              placeholder: _vm.$t("Afewwords"),
+                                            },
+                                            domProps: {
+                                              value: _vm.transfer.notes,
+                                            },
+                                            on: {
+                                              input: function ($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.transfer,
+                                                  "notes",
+                                                  $event.target.value
+                                                )
+                                              },
+                                            },
+                                          }),
+                                        ]
+                                      ),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    { attrs: { md: "12" } },
+                                    [
+                                      _c(
+                                        "b-form-group",
+                                        [
+                                          _c(
+                                            "b-button",
+                                            {
+                                              attrs: {
+                                                variant: "primary",
+                                                disabled: _vm.SubmitProcessing,
+                                              },
+                                              on: {
+                                                click: _vm.Submit_Transfer,
+                                              },
+                                            },
+                                            [_vm._v(_vm._s(_vm.$t("submit")))]
+                                          ),
+                                          _vm._v(" "),
+                                          _vm.SubmitProcessing
+                                            ? _vm._m(0)
+                                            : _vm._e(),
+                                        ],
+                                        1
+                                      ),
+                                    ],
+                                    1
+                                  ),
+                                ],
+                                1
+                              ),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "validation-observer",
+        { ref: "Update_Detail_transfer" },
+        [
+          _c(
+            "b-modal",
+            {
+              attrs: {
+                "hide-footer": "",
+                size: "md",
+                id: "form_Update_Detail",
+                title: _vm.detail.name,
+              },
+            },
+            [
+              _c(
+                "b-form",
+                {
+                  on: {
+                    submit: function ($event) {
+                      $event.preventDefault()
+                      return _vm.submit_Update_Detail.apply(null, arguments)
+                    },
+                  },
+                },
+                [
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        { attrs: { lg: "12", md: "12", sm: "12" } },
+                        [
+                          _c("validation-provider", {
+                            attrs: {
+                              name: "Product Cost",
+                              rules: { required: true, regex: /^\d*\.?\d*$/ },
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function (validationContext) {
+                                  return [
+                                    _c(
+                                      "b-form-group",
+                                      {
+                                        attrs: {
+                                          label:
+                                            _vm.$t("ProductCost") + " " + "*",
+                                          id: "cost-input",
+                                        },
+                                      },
+                                      [
+                                        _c("b-form-input", {
+                                          attrs: {
+                                            label: "Product Cost",
+                                            state:
+                                              _vm.getValidationState(
+                                                validationContext
+                                              ),
+                                            "aria-describedby": "cost-feedback",
+                                          },
+                                          model: {
+                                            value: _vm.detail.Unit_cost,
+                                            callback: function ($$v) {
+                                              _vm.$set(
+                                                _vm.detail,
+                                                "Unit_cost",
+                                                _vm._n($$v)
+                                              )
+                                            },
+                                            expression: "detail.Unit_cost",
+                                          },
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "b-form-invalid-feedback",
+                                          { attrs: { id: "cost-feedback" } },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                validationContext.errors[0]
+                                              )
+                                            ),
+                                          ]
+                                        ),
+                                      ],
+                                      1
+                                    ),
+                                  ]
+                                },
+                              },
+                            ]),
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { lg: "12", md: "12", sm: "12" } },
+                        [
+                          _c("validation-provider", {
+                            attrs: {
+                              name: "Tax Method",
+                              rules: { required: true },
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function (ref) {
+                                  var valid = ref.valid
+                                  var errors = ref.errors
+                                  return _c(
+                                    "b-form-group",
+                                    {
+                                      attrs: {
+                                        label: _vm.$t("TaxMethod") + " " + "*",
+                                      },
+                                    },
+                                    [
+                                      _c("v-select", {
+                                        class: {
+                                          "is-invalid": !!errors.length,
+                                        },
+                                        attrs: {
+                                          state: errors[0]
+                                            ? false
+                                            : valid
+                                            ? true
+                                            : null,
+                                          reduce: function (label) {
+                                            return label.value
+                                          },
+                                          placeholder: _vm.$t("Choose_Method"),
+                                          options: [
+                                            { label: "Exclusive", value: "1" },
+                                            { label: "Inclusive", value: "2" },
+                                          ],
+                                        },
+                                        model: {
+                                          value: _vm.detail.tax_method,
+                                          callback: function ($$v) {
+                                            _vm.$set(
+                                              _vm.detail,
+                                              "tax_method",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "detail.tax_method",
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c("b-form-invalid-feedback", [
+                                        _vm._v(_vm._s(errors[0])),
+                                      ]),
+                                    ],
+                                    1
+                                  )
+                                },
+                              },
+                            ]),
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { lg: "12", md: "12", sm: "12" } },
+                        [
+                          _c("validation-provider", {
+                            attrs: {
+                              name: "Order Tax",
+                              rules: { required: true, regex: /^\d*\.?\d*$/ },
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function (validationContext) {
+                                  return [
+                                    _c(
+                                      "b-form-group",
+                                      {
+                                        attrs: {
+                                          label: _vm.$t("OrderTax") + " " + "*",
+                                        },
+                                      },
+                                      [
+                                        _c(
+                                          "b-input-group",
+                                          { attrs: { append: "%" } },
+                                          [
+                                            _c("b-form-input", {
+                                              attrs: {
+                                                label: "Order Tax",
+                                                state:
+                                                  _vm.getValidationState(
+                                                    validationContext
+                                                  ),
+                                                "aria-describedby":
+                                                  "OrderTax-feedback",
+                                              },
+                                              model: {
+                                                value: _vm.detail.tax_percent,
+                                                callback: function ($$v) {
+                                                  _vm.$set(
+                                                    _vm.detail,
+                                                    "tax_percent",
+                                                    _vm._n($$v)
+                                                  )
+                                                },
+                                                expression:
+                                                  "detail.tax_percent",
+                                              },
+                                            }),
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "b-form-invalid-feedback",
+                                          {
+                                            attrs: { id: "OrderTax-feedback" },
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                validationContext.errors[0]
+                                              )
+                                            ),
+                                          ]
+                                        ),
+                                      ],
+                                      1
+                                    ),
+                                  ]
+                                },
+                              },
+                            ]),
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { lg: "12", md: "12", sm: "12" } },
+                        [
+                          _c("validation-provider", {
+                            attrs: {
+                              name: "Discount Method",
+                              rules: { required: true },
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function (ref) {
+                                  var valid = ref.valid
+                                  var errors = ref.errors
+                                  return _c(
+                                    "b-form-group",
+                                    {
+                                      attrs: {
+                                        label:
+                                          _vm.$t("Discount_Method") + " " + "*",
+                                      },
+                                    },
+                                    [
+                                      _c("v-select", {
+                                        class: {
+                                          "is-invalid": !!errors.length,
+                                        },
+                                        attrs: {
+                                          reduce: function (label) {
+                                            return label.value
+                                          },
+                                          placeholder: _vm.$t("Choose_Method"),
+                                          state: errors[0]
+                                            ? false
+                                            : valid
+                                            ? true
+                                            : null,
+                                          options: [
+                                            { label: "Percent %", value: "1" },
+                                            { label: "Fixed", value: "2" },
+                                          ],
+                                        },
+                                        model: {
+                                          value: _vm.detail.discount_Method,
+                                          callback: function ($$v) {
+                                            _vm.$set(
+                                              _vm.detail,
+                                              "discount_Method",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "detail.discount_Method",
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c("b-form-invalid-feedback", [
+                                        _vm._v(_vm._s(errors[0])),
+                                      ]),
+                                    ],
+                                    1
+                                  )
+                                },
+                              },
+                            ]),
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { lg: "12", md: "12", sm: "12" } },
+                        [
+                          _c("validation-provider", {
+                            attrs: {
+                              name: "Discount Rate",
+                              rules: { required: true, regex: /^\d*\.?\d*$/ },
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function (validationContext) {
+                                  return [
+                                    _c(
+                                      "b-form-group",
+                                      {
+                                        attrs: {
+                                          label: _vm.$t("Discount") + " " + "*",
+                                        },
+                                      },
+                                      [
+                                        _c("b-form-input", {
+                                          attrs: {
+                                            label: "Discount",
+                                            state:
+                                              _vm.getValidationState(
+                                                validationContext
+                                              ),
+                                            "aria-describedby":
+                                              "Discount-feedback",
+                                          },
+                                          model: {
+                                            value: _vm.detail.discount,
+                                            callback: function ($$v) {
+                                              _vm.$set(
+                                                _vm.detail,
+                                                "discount",
+                                                _vm._n($$v)
+                                              )
+                                            },
+                                            expression: "detail.discount",
+                                          },
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "b-form-invalid-feedback",
+                                          {
+                                            attrs: { id: "Discount-feedback" },
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                validationContext.errors[0]
+                                              )
+                                            ),
+                                          ]
+                                        ),
+                                      ],
+                                      1
+                                    ),
+                                  ]
+                                },
+                              },
+                            ]),
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { md: "12" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            [
+                              _c(
+                                "b-button",
+                                {
+                                  attrs: { variant: "primary", type: "submit" },
+                                },
+                                [_vm._v(_vm._s(_vm.$t("submit")))]
+                              ),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "typo__p" }, [
+      _c("div", { staticClass: "spinner sm spinner-primary mt-3" }),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ })
+
+}]);

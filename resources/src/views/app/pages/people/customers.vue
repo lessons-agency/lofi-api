@@ -270,7 +270,7 @@
               <tr>
                 <!-- Customer Email -->
                 <td>{{$t('Email')}}</td>
-                <th>{{client.email}}</th>
+                <th>{{client.email.slice( 0, 15)}}...</th>
               </tr>
               <tr>
                 <!-- Customer country -->

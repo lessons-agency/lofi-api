@@ -1,35 +1,23 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="$t('ListTransfers')" :folder="$t('StockTransfers')"/>
+    <breadcumb :page="$t('ListTransfers')" :folder="$t('StockTransfers')" />
 
     <div v-if="isLoading" class="loading_page spinner spinner-primary mr-3"></div>
     <div v-else>
-      <vue-good-table
-        mode="remote"
-        :columns="columns"
-        :totalRows="totalRows"
-        :rows="transfers"
-        @on-page-change="onPageChange"
-        @on-per-page-change="onPerPageChange"
-        @on-sort-change="onSortChange"
-        @on-search="onSearch"
-        :search-options="{
-        enabled: true,
-        placeholder: $t('Search_this_table'),  
-      }"
-        :select-options="{ 
+      <vue-good-table mode="remote" :columns="columns" :totalRows="totalRows" :rows="transfers"
+        @on-page-change="onPageChange" @on-per-page-change="onPerPageChange" @on-sort-change="onSortChange"
+        @on-search="onSearch" :search-options="{
+          enabled: true,
+          placeholder: $t('Search_this_table'),  
+        }" :select-options="{ 
           enabled: true ,
           clearSelectionText: '',
-        }"
-        @on-selected-rows-change="selectionChanged"
-        :pagination-options="{
+        }" @on-selected-rows-change="selectionChanged" :pagination-options="{
         enabled: true,
         mode: 'records',
         nextLabel: 'next',
         prevLabel: 'prev',
-      }"
-        styleClass="tableOne table-hover vgt-table"
-      >
+      }" styleClass="tableOne table-hover vgt-table">
         <div slot="selected-row-actions">
           <button class="btn btn-danger btn-sm" @click="delete_by_selected()">{{$t('Del')}}</button>
         </div>
@@ -44,11 +32,8 @@
           <b-button @click="Transfer_Excel()" size="sm" variant="outline-danger ripple m-1">
             <i class="i-File-Excel"></i> EXCEL
           </b-button>
-          <router-link
-            class="btn-sm btn btn-primary ripple btn-icon m-1"
-            v-if="currentUserPermissions && currentUserPermissions.includes('transfer_add')"
-            to="/app/transfers/store"
-          >
+          <router-link class="btn-sm btn btn-primary ripple btn-icon m-1"
+            v-if="currentUserPermissions && currentUserPermissions.includes('transfer_add')" to="/app/transfers/store">
             <span class="ul-btn__icon">
               <i class="i-Add"></i>
             </span>
@@ -61,32 +46,19 @@
             <a title="View" v-b-tooltip.hover @click="showDetails(props.row.id)">
               <i class="i-Eye text-25 text-info"></i>
             </a>
-            <router-link
-              v-if="currentUserPermissions && currentUserPermissions.includes('transfer_edit')"
-              title="Edit"
-              v-b-tooltip.hover
-              :to="{ name:'edit_transfer', params: { id: props.row.id } }"
-            >
+            <router-link v-if="currentUserPermissions && currentUserPermissions.includes('transfer_edit')" title="Edit"
+              v-b-tooltip.hover :to="{ name:'edit_transfer', params: { id: props.row.id } }">
               <i class="i-Edit text-25 text-success"></i>
             </router-link>
-            <a
-              title="Delete"
-              v-b-tooltip.hover
+            <a title="Delete" v-b-tooltip.hover
               v-if="currentUserPermissions && currentUserPermissions.includes('transfer_delete')"
-              @click="Remove_Transfer(props.row.id)"
-            >
+              @click="Remove_Transfer(props.row.id)">
               <i class="i-Close-Window text-25 text-danger"></i>
             </a>
           </span>
           <div v-else-if="props.column.field == 'statut'">
-            <span
-              v-if="props.row.statut == 'completed'"
-              class="badge badge-outline-success"
-            >{{$t('complete')}}</span>
-            <span
-              v-else-if="props.row.statut == 'sent'"
-              class="badge badge-outline-warning"
-            >{{$t('Sent')}}</span>
+            <span v-if="props.row.statut == 'completed'" class="badge badge-outline-success">{{$t('complete')}}</span>
+            <span v-else-if="props.row.statut == 'sent'" class="badge badge-outline-warning">{{$t('Sent')}}</span>
             <span v-else class="badge badge-outline-danger">{{$t('Pending')}}</span>
           </div>
         </template>
@@ -107,51 +79,34 @@
           <!-- From warehouse  -->
           <b-col md="12">
             <b-form-group :label="$t('FromWarehouse')">
-              <v-select
-                :reduce="label => label.value"
-                :placeholder="$t('Choose_Warehouse')"
-                v-model="Filter_From"
-                :options="warehouses.map(warehouses => ({label: warehouses.name, value: warehouses.id}))"
-              />
+              <v-select :reduce="label => label.value" :placeholder="$t('Choose_Warehouse')" v-model="Filter_From"
+                :options="warehouses.map(warehouses => ({label: warehouses.name, value: warehouses.id}))" />
             </b-form-group>
           </b-col>
 
           <!-- To warehouse  -->
           <b-col md="12">
             <b-form-group :label="$t('ToWarehouse')">
-              <v-select
-                :reduce="label => label.value"
-                :placeholder="$t('Choose_Warehouse')"
-                v-model="Filter_To"
-                :options="warehouses.map(warehouses => ({label: warehouses.name, value: warehouses.id}))"
-              />
+              <v-select :reduce="label => label.value" :placeholder="$t('Choose_Warehouse')" v-model="Filter_To"
+                :options="warehouses.map(warehouses => ({label: warehouses.name, value: warehouses.id}))" />
             </b-form-group>
           </b-col>
 
           <!-- Status  -->
           <b-col md="12">
             <b-form-group :label="$t('Status')">
-              <v-select
-                v-model="Filter_status"
-                :reduce="label => label.value"
-                :placeholder="$t('Choose_Status')"
+              <v-select v-model="Filter_status" :reduce="label => label.value" :placeholder="$t('Choose_Status')"
                 :options="
-                      [
-                        {label: 'Completed', value: 'completed'},
-                        {label: 'Sent', value: 'sent'},
-                        {label: 'Pending', value: 'pending'},
-                      ]"
-              ></v-select>
+                [
+                  {label: 'Completed', value: 'completed'},
+                  {label: 'Sent', value: 'sent'},
+                  {label: 'Pending', value: 'pending'},
+                ]"></v-select>
             </b-form-group>
           </b-col>
 
           <b-col md="6" sm="12">
-            <b-button
-              @click="Get_Transfers(serverParams.page)"
-              variant="primary ripple m-1"
-              size="sm"
-              block
-            >
+            <b-button @click="Get_Transfers(serverParams.page)" variant="primary ripple m-1" size="sm" block>
               <i class="i-Filter-2"></i>
               {{ $t("Filter") }}
             </b-button>
@@ -168,7 +123,9 @@
 
     <!-- Transfer Details -->
     <b-modal ok-only size="lg" id="showDetails" :title="$t('TransferDetail')">
-      <b-row>
+    <div id="transferDetailsModal">
+
+        <b-row>
         <b-col lg="5" md="12" sm="12" class="mt-3">
           <table class="table table-hover table-bordered table-sm">
             <tbody>
@@ -201,20 +158,17 @@
               <tr>
                 <td>{{$t('Status')}}</td>
                 <th>
-                  <span
-                    v-if="transfer.statut == 'completed'"
-                    class="badge badge-outline-success"
-                  >{{$t('complete')}}</span>
-                  <span
-                    v-else-if="transfer.statut == 'sent'"
-                    class="badge badge-outline-warning"
-                  >{{$t('Sent')}}</span>
+                  <span v-if="transfer.statut == 'completed'"
+                    class="badge badge-outline-success">{{$t('complete')}}</span>
+                  <span v-else-if="transfer.statut == 'sent'" class="badge badge-outline-warning">{{$t('Sent')}}</span>
                   <span v-else class="badge badge-outline-danger">{{$t('Pending')}}</span>
                 </th>
               </tr>
             </tbody>
           </table>
         </b-col>
+        <br/>
+        <br/>
         <b-col lg="7" md="12" sm="12" class="mt-3">
           <div class="table-responsive">
             <table class="table table-hover table-bordered table-sm">
@@ -238,12 +192,16 @@
           </div>
         </b-col>
       </b-row>
-         <hr v-show="transfer.note">
-          <b-row class="mt-4">
-           <b-col md="12">
-             <p>{{transfer.note}}</p>
-           </b-col>
-        </b-row>
+      <hr v-show="transfer.note">
+      <b-row class="mt-4">
+        <b-col md="12">
+          <p>{{transfer.note}}</p>
+        </b-col>
+      </b-row>
+
+    </div>
+
+      <b-button class="mt-3" block @click="print_transfer(transfer)"> Print Transfer </b-button>
     </b-modal>
   </div>
 </template>
@@ -350,6 +308,23 @@ export default {
   },
 
   methods: {
+    //------------------------------ Print -------------------------\\
+    print_transfer() {
+      var divContents = document.getElementById("transferDetailsModal").innerHTML;
+      var a = window.open("", "", "height=500, width=500");
+      a.document.write(
+        '<link rel="stylesheet" href="/css/pos_print.css"><html>'
+      );
+      a.document.write("<body >");
+      a.document.write(divContents);
+      a.document.write("</body></html>");
+      a.document.close();
+      a.print();
+    },
+
+
+
+
     //---- update Params Table
     updateParams(newProps) {
       this.serverParams = Object.assign({}, this.serverParams, newProps);

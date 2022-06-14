@@ -1,1 +1,915 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[2885],{59707:(e,t,s)=>{s.r(t),s.d(t,{default:()=>d});var r=s(20629),a=s(74865),i=s.n(a);function o(e,t){var s=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),s.push.apply(s,r)}return s}function n(e){for(var t=1;t<arguments.length;t++){var s=null!=arguments[t]?arguments[t]:{};t%2?o(Object(s),!0).forEach((function(t){c(e,t,s[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(s)):o(Object(s)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(s,t))}))}return e}function c(e,t,s){return t in e?Object.defineProperty(e,t,{value:s,enumerable:!0,configurable:!0,writable:!0}):e[t]=s,e}const l={metaInfo:{title:"Expense Category"},data:function(){return{isLoading:!0,SubmitProcessing:!1,serverParams:{columnFilters:{},sort:{field:"id",type:"desc"},page:1,perPage:10},selectedIds:[],totalRows:"",search:"",categories:[],editmode:!1,limit:"10",category:{id:"",name:"",description:""}}},computed:n(n({},(0,r.Se)(["currentUserPermissions"])),{},{columns:function(){return[{label:this.$t("Namecategorie"),field:"name",tdClass:"text-left",thClass:"text-left"},{label:this.$t("Description"),field:"description",tdClass:"text-left",thClass:"text-left"},{label:this.$t("Action"),field:"actions",html:!0,tdClass:"text-right",thClass:"text-right",sortable:!1}]}}),methods:{Submit_Category:function(){var e=this;this.$refs.Create_Category.validate().then((function(t){t?e.editmode?e.Update_Category():e.Create_Category():e.makeToast("danger",e.$t("Please_fill_the_form_correctly"),e.$t("Failed"))}))},makeToast:function(e,t,s){this.$root.$bvToast.toast(t,{title:s,variant:e,solid:!0})},updateParams:function(e){this.serverParams=Object.assign({},this.serverParams,e)},onPageChange:function(e){var t=e.currentPage;this.serverParams.page!==t&&(this.updateParams({page:t}),this.Get_Categories(t))},onPerPageChange:function(e){var t=e.currentPerPage;this.limit!==t&&(this.limit=t,this.updateParams({page:1,perPage:t}),this.Get_Categories(1))},selectionChanged:function(e){var t=this,s=e.selectedRows;this.selectedIds=[],s.forEach((function(e,s){t.selectedIds.push(e.id)}))},onSortChange:function(e){this.updateParams({sort:{type:e[0].type,field:e[0].field}}),this.Get_Categories(this.serverParams.page)},onSearch:function(e){this.search=e.searchTerm,this.Get_Categories(this.serverParams.page)},getValidationState:function(e){var t=e.dirty,s=e.validated,r=e.valid;return t||s?void 0===r?null:r:null},New_Category:function(){this.reset_Form(),this.editmode=!1,this.$bvModal.show("New_Category")},Edit_Category:function(e){this.Get_Categories(this.serverParams.page),this.reset_Form(),this.category=e,this.editmode=!0,this.$bvModal.show("New_Category")},reset_Form:function(){this.category={id:"",name:"",description:""}},Get_Categories:function(e){var t=this;i().start(),i().set(.1),axios.get("expensescategory?page="+e+"&SortField="+this.serverParams.sort.field+"&SortType="+this.serverParams.sort.type+"&search="+this.search+"&limit="+this.limit).then((function(e){t.categories=e.data.Expenses_category,t.totalRows=e.data.totalRows,i().done(),t.isLoading=!1})).catch((function(e){i().done(),setTimeout((function(){t.isLoading=!1}),500)}))},Create_Category:function(){var e=this;this.SubmitProcessing=!0,axios.post("expensescategory",{name:this.category.name,description:this.category.description}).then((function(t){Fire.$emit("Create_Category_Expense"),e.makeToast("success",e.$t("Successfully_Created"),e.$t("Success")),e.SubmitProcessing=!1})).catch((function(t){e.makeToast("danger",e.$t("InvalidData"),e.$t("Failed")),e.SubmitProcessing=!1}))},Update_Category:function(){var e=this;this.SubmitProcessing=!0,axios.put("expensescategory/"+this.category.id,{name:this.category.name,description:this.category.description}).then((function(t){Fire.$emit("Create_Category_Expense"),e.makeToast("success",e.$t("Successfully_Updated"),e.$t("Success")),e.SubmitProcessing=!1})).catch((function(t){e.makeToast("danger",e.$t("InvalidData"),e.$t("Failed")),e.SubmitProcessing=!1}))},Delete_Category:function(e){var t=this;this.$swal({title:this.$t("Delete.Title"),text:this.$t("Delete.Text"),type:"warning",showCancelButton:!0,confirmButtonColor:"#3085d6",cancelButtonColor:"#d33",cancelButtonText:this.$t("Delete.cancelButtonText"),confirmButtonText:this.$t("Delete.confirmButtonText")}).then((function(s){s.value&&axios.delete("expensescategory/"+e).then((function(){t.$swal(t.$t("Delete.Deleted"),t.$t("Delete.CatDeleted"),"success"),Fire.$emit("Delete_Category_Expense")})).catch((function(){t.$swal(t.$t("Delete.Failed"),t.$t("Delete.Therewassomethingwronge"),"warning")}))}))},delete_by_selected:function(){var e=this;this.$swal({title:this.$t("Delete.Title"),text:this.$t("Delete.Text"),type:"warning",showCancelButton:!0,confirmButtonColor:"#3085d6",cancelButtonColor:"#d33",cancelButtonText:this.$t("Delete.cancelButtonText"),confirmButtonText:this.$t("Delete.confirmButtonText")}).then((function(t){t.value&&(i().start(),i().set(.1),axios.post("expensescategory/delete/by_selection",{selectedIds:e.selectedIds}).then((function(){e.$swal(e.$t("Delete.Deleted"),e.$t("Delete.CatDeleted"),"success"),Fire.$emit("Delete_Category_Expense")})).catch((function(){setTimeout((function(){return i().done()}),500),e.$swal(e.$t("Delete.Failed"),e.$t("Delete.Therewassomethingwronge"),"warning")})))}))}},created:function(){var e=this;this.Get_Categories(1),Fire.$on("Create_Category_Expense",(function(){e.Get_Categories(e.serverParams.page),e.$bvModal.hide("New_Category")})),Fire.$on("Delete_Category_Expense",(function(){e.Get_Categories(e.serverParams.page)}))}};const d=(0,s(51900).Z)(l,(function(){var e=this,t=e.$createElement,s=e._self._c||t;return s("div",{staticClass:"main-content"},[s("breadcumb",{attrs:{page:e.$t("Expense_Category"),folder:e.$t("Expenses")}}),e._v(" "),e.isLoading?s("div",{staticClass:"loading_page spinner spinner-primary mr-3"}):s("div",[s("vue-good-table",{attrs:{mode:"remote",columns:e.columns,totalRows:e.totalRows,rows:e.categories,"search-options":{enabled:!0,placeholder:e.$t("Search_this_table")},"select-options":{enabled:!0,clearSelectionText:""},"pagination-options":{enabled:!0,mode:"records",nextLabel:"next",prevLabel:"prev"},styleClass:"tableOne table-hover vgt-table"},on:{"on-page-change":e.onPageChange,"on-per-page-change":e.onPerPageChange,"on-sort-change":e.onSortChange,"on-search":e.onSearch,"on-selected-rows-change":e.selectionChanged},scopedSlots:e._u([{key:"table-row",fn:function(t){return["actions"==t.column.field?s("span",[e.currentUserPermissions&&e.currentUserPermissions.includes("expense_edit")?s("a",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:!0}}],staticClass:"cursor-pointer",attrs:{title:"Edit"},on:{click:function(s){return e.Edit_Category(t.row)}}},[s("i",{staticClass:"i-Edit text-25 text-success"})]):e._e(),e._v(" "),e.currentUserPermissions&&e.currentUserPermissions.includes("expense_delete")?s("a",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:!0}}],staticClass:"cursor-pointer",attrs:{title:"Delete"},on:{click:function(s){return e.Delete_Category(t.row.id)}}},[s("i",{staticClass:"i-Close-Window text-25 text-danger"})]):e._e()]):e._e()]}}])},[s("div",{attrs:{slot:"selected-row-actions"},slot:"selected-row-actions"},[s("button",{staticClass:"btn btn-danger btn-sm",on:{click:function(t){return e.delete_by_selected()}}},[e._v(e._s(e.$t("Del")))])]),e._v(" "),s("div",{staticClass:"mt-2 mb-3",attrs:{slot:"table-actions"},slot:"table-actions"},[e.currentUserPermissions&&e.currentUserPermissions.includes("expense_add")?s("b-button",{attrs:{size:"sm",variant:"primary ripple m-1"},on:{click:function(t){return e.New_Category()}}},[s("i",{staticClass:"i-Add"}),e._v("\n          "+e._s(e.$t("Add"))+"\n        ")]):e._e()],1)])],1),e._v(" "),s("validation-observer",{ref:"Create_Category"},[s("b-modal",{attrs:{"hide-footer":"",size:"lg",id:"New_Category",title:e.editmode?e.$t("Edit"):e.$t("Add")}},[s("b-form",{on:{submit:function(t){return t.preventDefault(),e.Submit_Category.apply(null,arguments)}}},[s("b-row",[s("b-col",{attrs:{md:"12"}},[s("validation-provider",{attrs:{name:"Name category",rules:{required:!0}},scopedSlots:e._u([{key:"default",fn:function(t){return[s("b-form-group",{attrs:{label:e.$t("Namecategorie")+" *"}},[s("b-form-input",{attrs:{state:e.getValidationState(t),"aria-describedby":"category-feedback",label:"name"},model:{value:e.category.name,callback:function(t){e.$set(e.category,"name",t)},expression:"category.name"}}),e._v(" "),s("b-form-invalid-feedback",{attrs:{id:"category-feedback"}},[e._v(e._s(t.errors[0]))])],1)]}}])})],1),e._v(" "),s("b-col",{attrs:{md:"12"}},[s("b-form-group",{attrs:{label:e.$t("Description")}},[s("textarea",{directives:[{name:"model",rawName:"v-model",value:e.category.description,expression:"category.description"}],staticClass:"form-control",attrs:{rows:"4",name:"Description",id:"Description",placeholder:e.$t("Afewwords")},domProps:{value:e.category.description},on:{input:function(t){t.target.composing||e.$set(e.category,"description",t.target.value)}}})])],1),e._v(" "),s("b-col",{staticClass:"mt-3",attrs:{md:"12"}},[s("b-button",{attrs:{variant:"primary",type:"submit",disabled:e.SubmitProcessing}},[e._v(e._s(e.$t("submit")))]),e._v(" "),e.SubmitProcessing?e._m(0):e._e()],1)],1)],1)],1)],1)],1)}),[function(){var e=this.$createElement,t=this._self._c||e;return t("div",{staticClass:"typo__p"},[t("div",{staticClass:"spinner sm spinner-primary mt-3"})])}],!1,null,null,null).exports}}]);
+"use strict";
+(self["webpackChunk"] = self["webpackChunk"] || []).push([["expense_category"],{
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/expense/category_expense.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/expense/category_expense.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! nprogress */ "./node_modules/nprogress/nprogress.js");
+/* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nprogress__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  metaInfo: {
+    title: "Expense Category"
+  },
+  data: function data() {
+    return {
+      isLoading: true,
+      SubmitProcessing: false,
+      serverParams: {
+        columnFilters: {},
+        sort: {
+          field: "id",
+          type: "desc"
+        },
+        page: 1,
+        perPage: 10
+      },
+      selectedIds: [],
+      totalRows: "",
+      search: "",
+      categories: [],
+      editmode: false,
+      limit: "10",
+      category: {
+        id: "",
+        name: "",
+        description: ""
+      }
+    };
+  },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(["currentUserPermissions"])), {}, {
+    columns: function columns() {
+      return [{
+        label: this.$t("Namecategorie"),
+        field: "name",
+        tdClass: "text-left",
+        thClass: "text-left"
+      }, {
+        label: this.$t("Description"),
+        field: "description",
+        tdClass: "text-left",
+        thClass: "text-left"
+      }, {
+        label: this.$t("Action"),
+        field: "actions",
+        html: true,
+        tdClass: "text-right",
+        thClass: "text-right",
+        sortable: false
+      }];
+    }
+  }),
+  methods: {
+    //------------- Submit Validation Create & Edit Category
+    Submit_Category: function Submit_Category() {
+      var _this = this;
+
+      this.$refs.Create_Category.validate().then(function (success) {
+        if (!success) {
+          _this.makeToast("danger", _this.$t("Please_fill_the_form_correctly"), _this.$t("Failed"));
+        } else {
+          if (!_this.editmode) {
+            _this.Create_Category();
+          } else {
+            _this.Update_Category();
+          }
+        }
+      });
+    },
+    //------ Toast
+    makeToast: function makeToast(variant, msg, title) {
+      this.$root.$bvToast.toast(msg, {
+        title: title,
+        variant: variant,
+        solid: true
+      });
+    },
+    //------ Update Params Table
+    updateParams: function updateParams(newProps) {
+      this.serverParams = Object.assign({}, this.serverParams, newProps);
+    },
+    //---- Event Page Change
+    onPageChange: function onPageChange(_ref) {
+      var currentPage = _ref.currentPage;
+
+      if (this.serverParams.page !== currentPage) {
+        this.updateParams({
+          page: currentPage
+        });
+        this.Get_Categories(currentPage);
+      }
+    },
+    //---- Event Per Page Change
+    onPerPageChange: function onPerPageChange(_ref2) {
+      var currentPerPage = _ref2.currentPerPage;
+
+      if (this.limit !== currentPerPage) {
+        this.limit = currentPerPage;
+        this.updateParams({
+          page: 1,
+          perPage: currentPerPage
+        });
+        this.Get_Categories(1);
+      }
+    },
+    //---- Event Select Rows
+    selectionChanged: function selectionChanged(_ref3) {
+      var _this2 = this;
+
+      var selectedRows = _ref3.selectedRows;
+      this.selectedIds = [];
+      selectedRows.forEach(function (row, index) {
+        _this2.selectedIds.push(row.id);
+      });
+    },
+    //------ Event Sort change
+    onSortChange: function onSortChange(params) {
+      this.updateParams({
+        sort: {
+          type: params[0].type,
+          field: params[0].field
+        }
+      });
+      this.Get_Categories(this.serverParams.page);
+    },
+    //------ Event Search
+    onSearch: function onSearch(value) {
+      this.search = value.searchTerm;
+      this.Get_Categories(this.serverParams.page);
+    },
+    //------ Event Validation State
+    getValidationState: function getValidationState(_ref4) {
+      var dirty = _ref4.dirty,
+          validated = _ref4.validated,
+          _ref4$valid = _ref4.valid,
+          valid = _ref4$valid === void 0 ? null : _ref4$valid;
+      return dirty || validated ? valid : null;
+    },
+    //--------------------------Show Modal (new Category) ----------------\\
+    New_Category: function New_Category() {
+      this.reset_Form();
+      this.editmode = false;
+      this.$bvModal.show("New_Category");
+    },
+    //-------------------------- Show Modal (Edit Category) ----------------\\
+    Edit_Category: function Edit_Category(cat) {
+      this.Get_Categories(this.serverParams.page);
+      this.reset_Form();
+      this.category = cat;
+      this.editmode = true;
+      this.$bvModal.show("New_Category");
+    },
+    //--------------------------- reset Form ----------------\\
+    reset_Form: function reset_Form() {
+      this.category = {
+        id: "",
+        name: "",
+        description: ""
+      };
+    },
+    //--------------------------Get ALL Categories ---------------------------\\
+    Get_Categories: function Get_Categories(page) {
+      var _this3 = this;
+
+      // Start the progress bar.
+      nprogress__WEBPACK_IMPORTED_MODULE_0___default().start();
+      nprogress__WEBPACK_IMPORTED_MODULE_0___default().set(0.1);
+      axios.get("expensescategory?page=" + page + "&SortField=" + this.serverParams.sort.field + "&SortType=" + this.serverParams.sort.type + "&search=" + this.search + "&limit=" + this.limit).then(function (response) {
+        _this3.categories = response.data.Expenses_category;
+        _this3.totalRows = response.data.totalRows; // Complete the animation of theprogress bar.
+
+        nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+        _this3.isLoading = false;
+      })["catch"](function (response) {
+        // Complete the animation of theprogress bar.
+        nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+        setTimeout(function () {
+          _this3.isLoading = false;
+        }, 500);
+      });
+    },
+    //----------------------------------Create new Category ----------------\\
+    Create_Category: function Create_Category() {
+      var _this4 = this;
+
+      this.SubmitProcessing = true;
+      axios.post("expensescategory", {
+        name: this.category.name,
+        description: this.category.description
+      }).then(function (response) {
+        Fire.$emit("Create_Category_Expense");
+
+        _this4.makeToast("success", _this4.$t("Successfully_Created"), _this4.$t("Success"));
+
+        _this4.SubmitProcessing = false;
+      })["catch"](function (error) {
+        _this4.makeToast("danger", _this4.$t("InvalidData"), _this4.$t("Failed"));
+
+        _this4.SubmitProcessing = false;
+      });
+    },
+    //---------------------------------- Update Category ----------------\\
+    Update_Category: function Update_Category() {
+      var _this5 = this;
+
+      this.SubmitProcessing = true;
+      axios.put("expensescategory/" + this.category.id, {
+        name: this.category.name,
+        description: this.category.description
+      }).then(function (response) {
+        Fire.$emit("Create_Category_Expense");
+
+        _this5.makeToast("success", _this5.$t("Successfully_Updated"), _this5.$t("Success"));
+
+        _this5.SubmitProcessing = false;
+      })["catch"](function (error) {
+        _this5.makeToast("danger", _this5.$t("InvalidData"), _this5.$t("Failed"));
+
+        _this5.SubmitProcessing = false;
+      });
+    },
+    //--------------------------- Delete Category----------------\\
+    Delete_Category: function Delete_Category(id) {
+      var _this6 = this;
+
+      this.$swal({
+        title: this.$t("Delete.Title"),
+        text: this.$t("Delete.Text"),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: this.$t("Delete.cancelButtonText"),
+        confirmButtonText: this.$t("Delete.confirmButtonText")
+      }).then(function (result) {
+        if (result.value) {
+          axios["delete"]("expensescategory/" + id).then(function () {
+            _this6.$swal(_this6.$t("Delete.Deleted"), _this6.$t("Delete.CatDeleted"), "success");
+
+            Fire.$emit("Delete_Category_Expense");
+          })["catch"](function () {
+            _this6.$swal(_this6.$t("Delete.Failed"), _this6.$t("Delete.Therewassomethingwronge"), "warning");
+          });
+        }
+      });
+    },
+    //---- Delete Category Expense by selection
+    delete_by_selected: function delete_by_selected() {
+      var _this7 = this;
+
+      this.$swal({
+        title: this.$t("Delete.Title"),
+        text: this.$t("Delete.Text"),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: this.$t("Delete.cancelButtonText"),
+        confirmButtonText: this.$t("Delete.confirmButtonText")
+      }).then(function (result) {
+        if (result.value) {
+          // Start the progress bar.
+          nprogress__WEBPACK_IMPORTED_MODULE_0___default().start();
+          nprogress__WEBPACK_IMPORTED_MODULE_0___default().set(0.1);
+          axios.post("expensescategory/delete/by_selection", {
+            selectedIds: _this7.selectedIds
+          }).then(function () {
+            _this7.$swal(_this7.$t("Delete.Deleted"), _this7.$t("Delete.CatDeleted"), "success");
+
+            Fire.$emit("Delete_Category_Expense");
+          })["catch"](function () {
+            // Complete the animation of theprogress bar.
+            setTimeout(function () {
+              return nprogress__WEBPACK_IMPORTED_MODULE_0___default().done();
+            }, 500);
+
+            _this7.$swal(_this7.$t("Delete.Failed"), _this7.$t("Delete.Therewassomethingwronge"), "warning");
+          });
+        }
+      });
+    }
+  },
+  //end Methods
+  //----------------------------- Created function-------------------
+  created: function created() {
+    var _this8 = this;
+
+    this.Get_Categories(1);
+    Fire.$on("Create_Category_Expense", function () {
+      _this8.Get_Categories(_this8.serverParams.page);
+
+      _this8.$bvModal.hide("New_Category");
+    });
+    Fire.$on("Delete_Category_Expense", function () {
+      _this8.Get_Categories(_this8.serverParams.page);
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/expense/category_expense.vue":
+/*!********************************************************************!*\
+  !*** ./resources/src/views/app/pages/expense/category_expense.vue ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _category_expense_vue_vue_type_template_id_2672b3cb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./category_expense.vue?vue&type=template&id=2672b3cb& */ "./resources/src/views/app/pages/expense/category_expense.vue?vue&type=template&id=2672b3cb&");
+/* harmony import */ var _category_expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./category_expense.vue?vue&type=script&lang=js& */ "./resources/src/views/app/pages/expense/category_expense.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _category_expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _category_expense_vue_vue_type_template_id_2672b3cb___WEBPACK_IMPORTED_MODULE_0__.render,
+  _category_expense_vue_vue_type_template_id_2672b3cb___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/src/views/app/pages/expense/category_expense.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/expense/category_expense.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/src/views/app/pages/expense/category_expense.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_category_expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./category_expense.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/expense/category_expense.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_category_expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/src/views/app/pages/expense/category_expense.vue?vue&type=template&id=2672b3cb&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/src/views/app/pages/expense/category_expense.vue?vue&type=template&id=2672b3cb& ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_category_expense_vue_vue_type_template_id_2672b3cb___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_category_expense_vue_vue_type_template_id_2672b3cb___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_category_expense_vue_vue_type_template_id_2672b3cb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./category_expense.vue?vue&type=template&id=2672b3cb& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/expense/category_expense.vue?vue&type=template&id=2672b3cb&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/expense/category_expense.vue?vue&type=template&id=2672b3cb&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/src/views/app/pages/expense/category_expense.vue?vue&type=template&id=2672b3cb& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "main-content" },
+    [
+      _c("breadcumb", {
+        attrs: { page: _vm.$t("Expense_Category"), folder: _vm.$t("Expenses") },
+      }),
+      _vm._v(" "),
+      _vm.isLoading
+        ? _c("div", {
+            staticClass: "loading_page spinner spinner-primary mr-3",
+          })
+        : _c(
+            "div",
+            [
+              _c(
+                "vue-good-table",
+                {
+                  attrs: {
+                    mode: "remote",
+                    columns: _vm.columns,
+                    totalRows: _vm.totalRows,
+                    rows: _vm.categories,
+                    "search-options": {
+                      enabled: true,
+                      placeholder: _vm.$t("Search_this_table"),
+                    },
+                    "select-options": {
+                      enabled: true,
+                      clearSelectionText: "",
+                    },
+                    "pagination-options": {
+                      enabled: true,
+                      mode: "records",
+                      nextLabel: "next",
+                      prevLabel: "prev",
+                    },
+                    styleClass: "tableOne table-hover vgt-table",
+                  },
+                  on: {
+                    "on-page-change": _vm.onPageChange,
+                    "on-per-page-change": _vm.onPerPageChange,
+                    "on-sort-change": _vm.onSortChange,
+                    "on-search": _vm.onSearch,
+                    "on-selected-rows-change": _vm.selectionChanged,
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "table-row",
+                      fn: function (props) {
+                        return [
+                          props.column.field == "actions"
+                            ? _c("span", [
+                                _vm.currentUserPermissions &&
+                                _vm.currentUserPermissions.includes(
+                                  "expense_edit"
+                                )
+                                  ? _c(
+                                      "a",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "b-tooltip",
+                                            rawName: "v-b-tooltip.hover",
+                                            modifiers: { hover: true },
+                                          },
+                                        ],
+                                        staticClass: "cursor-pointer",
+                                        attrs: { title: "Edit" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.Edit_Category(props.row)
+                                          },
+                                        },
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass:
+                                            "i-Edit text-25 text-success",
+                                        }),
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.currentUserPermissions &&
+                                _vm.currentUserPermissions.includes(
+                                  "expense_delete"
+                                )
+                                  ? _c(
+                                      "a",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "b-tooltip",
+                                            rawName: "v-b-tooltip.hover",
+                                            modifiers: { hover: true },
+                                          },
+                                        ],
+                                        staticClass: "cursor-pointer",
+                                        attrs: { title: "Delete" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.Delete_Category(
+                                              props.row.id
+                                            )
+                                          },
+                                        },
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass:
+                                            "i-Close-Window text-25 text-danger",
+                                        }),
+                                      ]
+                                    )
+                                  : _vm._e(),
+                              ])
+                            : _vm._e(),
+                        ]
+                      },
+                    },
+                  ]),
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      attrs: { slot: "selected-row-actions" },
+                      slot: "selected-row-actions",
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-sm",
+                          on: {
+                            click: function ($event) {
+                              return _vm.delete_by_selected()
+                            },
+                          },
+                        },
+                        [_vm._v(_vm._s(_vm.$t("Del")))]
+                      ),
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "mt-2 mb-3",
+                      attrs: { slot: "table-actions" },
+                      slot: "table-actions",
+                    },
+                    [
+                      _vm.currentUserPermissions &&
+                      _vm.currentUserPermissions.includes("expense_add")
+                        ? _c(
+                            "b-button",
+                            {
+                              attrs: {
+                                size: "sm",
+                                variant: "primary ripple m-1",
+                              },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.New_Category()
+                                },
+                              },
+                            },
+                            [
+                              _c("i", { staticClass: "i-Add" }),
+                              _vm._v(
+                                "\n          " +
+                                  _vm._s(_vm.$t("Add")) +
+                                  "\n        "
+                              ),
+                            ]
+                          )
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
+                ]
+              ),
+            ],
+            1
+          ),
+      _vm._v(" "),
+      _c(
+        "validation-observer",
+        { ref: "Create_Category" },
+        [
+          _c(
+            "b-modal",
+            {
+              attrs: {
+                "hide-footer": "",
+                size: "lg",
+                id: "New_Category",
+                title: _vm.editmode ? _vm.$t("Edit") : _vm.$t("Add"),
+              },
+            },
+            [
+              _c(
+                "b-form",
+                {
+                  on: {
+                    submit: function ($event) {
+                      $event.preventDefault()
+                      return _vm.Submit_Category.apply(null, arguments)
+                    },
+                  },
+                },
+                [
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        { attrs: { md: "12" } },
+                        [
+                          _c("validation-provider", {
+                            attrs: {
+                              name: "Name category",
+                              rules: { required: true },
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function (validationContext) {
+                                  return [
+                                    _c(
+                                      "b-form-group",
+                                      {
+                                        attrs: {
+                                          label:
+                                            _vm.$t("Namecategorie") + " " + "*",
+                                        },
+                                      },
+                                      [
+                                        _c("b-form-input", {
+                                          attrs: {
+                                            state:
+                                              _vm.getValidationState(
+                                                validationContext
+                                              ),
+                                            "aria-describedby":
+                                              "category-feedback",
+                                            label: "name",
+                                          },
+                                          model: {
+                                            value: _vm.category.name,
+                                            callback: function ($$v) {
+                                              _vm.$set(
+                                                _vm.category,
+                                                "name",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "category.name",
+                                          },
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "b-form-invalid-feedback",
+                                          {
+                                            attrs: { id: "category-feedback" },
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                validationContext.errors[0]
+                                              )
+                                            ),
+                                          ]
+                                        ),
+                                      ],
+                                      1
+                                    ),
+                                  ]
+                                },
+                              },
+                            ]),
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { md: "12" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            { attrs: { label: _vm.$t("Description") } },
+                            [
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.category.description,
+                                    expression: "category.description",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  rows: "4",
+                                  name: "Description",
+                                  id: "Description",
+                                  placeholder: _vm.$t("Afewwords"),
+                                },
+                                domProps: { value: _vm.category.description },
+                                on: {
+                                  input: function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.category,
+                                      "description",
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              }),
+                            ]
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "mt-3", attrs: { md: "12" } },
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              attrs: {
+                                variant: "primary",
+                                type: "submit",
+                                disabled: _vm.SubmitProcessing,
+                              },
+                            },
+                            [_vm._v(_vm._s(_vm.$t("submit")))]
+                          ),
+                          _vm._v(" "),
+                          _vm.SubmitProcessing ? _vm._m(0) : _vm._e(),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "typo__p" }, [
+      _c("div", { staticClass: "spinner sm spinner-primary mt-3" }),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ })
+
+}]);

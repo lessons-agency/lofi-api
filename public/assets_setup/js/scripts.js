@@ -32,16 +32,14 @@ $(function() {
                     $('#errormsg').addClass('danger').addClass('alert-danger');
                     $('#testdb').removeClass('btn-dark').addClass('btn-danger');
                     $('#testdb').html('Test Connection <i class="fa fa-times "></i>');
-                    $('.next_step').removeClass('d-block').addClass('d-none');
                 }else
                 {
                     $('#errormsg').html(data.Success);
                     $('#errormsg').addClass('success').addClass('alert-success');
                     $('#testdb').removeClass('btn-dark').addClass('btn-success');
                     $('#testdb').html('Test Connection <i class="fa fa-check-circle-o "></i>');
-                    $('.next_step').removeClass('d-none').addClass('d-block');
                 }
-               
+                $('.next_step').removeClass('d-none').addClass('d-block');
                 $('#errormsg').addClass('text-white').addClass('p-1');
             },
             statusCode: {

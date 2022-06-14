@@ -180,6 +180,9 @@ export default {
 
     //------------------------------Formetted Numbers -------------------------\\
     formatNumber(number, dec) {
+
+
+    
       const value = (typeof number === "string"
         ? number
         : number.toString()
@@ -194,6 +197,7 @@ export default {
 
      //------- printproduct
     print_product() {
+ 
        this.$htmlToPaper('print_product');
     },
 
@@ -203,6 +207,7 @@ export default {
       axios
         .get(`Products/Detail/${id}`)
         .then(response => {
+        
           this.product = response.data;
           this.isLoading = false;
         })

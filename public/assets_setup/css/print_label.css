@@ -1,14 +1,3 @@
-
-@media print{
-	.barcode_non_a4 , .barcodea4{
-		margin: 0;
-	}
-
-	.barcode_non_a4 , .barcode_non_a4 .barcode-item, .barcodea4 , .barcodea4 .barcode-item{
-		border: none!important;
-	}
-}
-
 .barcodea4{
     width: 8.25in;
     height: 11.6in;
@@ -144,4 +133,13 @@
 	line-height: 20px;
 } 
 
+@media print{
+	.barcode_non_a4 , .barcodea4{
+		margin: 0;
+	}
+
+	.barcode_non_a4 , .barcode_non_a4 .barcode-item, .barcodea4 , .barcodea4 .barcode-item{
+		border: none!important;
+	}
+}
 	
